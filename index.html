@@ -409,7 +409,7 @@
         <button class="calc-button" onclick="buttonClick('1')">1</button>
         <button class="calc-button" onclick="buttonClick('2')">2</button>
         <button class="calc-button" onclick="buttonClick('3')">3</button>
-        <button class="calc-button purple" onclick="buttonClick('−')">−</button>
+        <button class="calc-button purple" onclick="buttonClick('−')">-</button>
       </div>
       <div class="calc-button-row">
         <button class="calc-button" onclick="buttonClick('π')">π</button>
@@ -1263,6 +1263,29 @@ screen.addEventListener('paste', function(e) {
   expression = filtered;
   updateDisplay();
 });
+
+let inputTimeout = null;
+let lastKeyTime = 0;
+
+screen.addEventListener('keydown', (e) => {
+  const now = Date.now();
+
+  // Prevent double-triggering if keys come too fast (less than 30ms apart)
+  if (now - lastKeyTime < 30) {
+    e.preventDefault();
+    return;
+  }
+  lastKeyTime = now;
+
+  // Clear any queued reformatting
+  if (inputTimeout) clearTimeout(inputTimeout);
+
+  // Schedule display reformatting a bit later (helps when typing very fast)
+  inputTimeout = setTimeout(() => {
+    updateDisplay();
+  }, 50);
+});
+
 
 </script>
 
