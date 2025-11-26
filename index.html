@@ -409,7 +409,7 @@
         <button class="calc-button" onclick="buttonClick('1')">1</button>
         <button class="calc-button" onclick="buttonClick('2')">2</button>
         <button class="calc-button" onclick="buttonClick('3')">3</button>
-        <button class="calc-button purple" onclick="buttonClick('−')">-</button>
+        <button class="calc-button purple" onclick="buttonClick('−')">−</button>
       </div>
       <div class="calc-button-row">
         <button class="calc-button" onclick="buttonClick('π')">π</button>
@@ -1285,6 +1285,11 @@ screen.addEventListener('keydown', (e) => {
     updateDisplay();
   }, 50);
 });
+
+const allowedKeys = /^[0-9+\-*/().^%!√π&|;:=\\nrx]$/i;
+if (!allowedKeys.test(e.key) && e.key !== "Backspace" && e.key !== "Enter") {
+  e.preventDefault();
+}
 
 
 </script>
