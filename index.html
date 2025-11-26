@@ -535,28 +535,29 @@ function simplifyExponential(expStr) {
   return mant + eStr;
 }
 function formatResult(num) {
-  if (num === Infinity) return "Overflow";
-  if (num === -Infinity) return "Too Low";
-  if (isNaN(num)) return "Undefined";
+  if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined"; // treat all bad divisions as Undefined
   if (Math.abs(num) >= 1e7 || (Math.abs(num) > 0 && Math.abs(num) < 1e-7)) {
     return simplifyExponential(num.toExponential());
   }
   let str = num.toFixed(10).replace(/\.?0+$/, "");
   return str.includes(".") ? str : parseInt(str, 10).toLocaleString("en-US");
 }
-function updateDisplay() {
-  const txt = expression || "0";
-  screen.value = addCommasToNumbers(txt);
-}
+
+
 function buttonClick(value) {
-  const errorStates = ["Overflow", "Too Low", "Undefined", "Error"];
-  if (errorStates.includes(screen.value)) {
-    if (value === "←" || value === "C") {
-      expression = "";
-      screen.value = "0";
-    }
+const errorStates = ["Overflow", "Too Low", "Undefined", "Error"];
+if (errorStates.includes(screen.value)) {
+  if (value === "C") {
+    expression = "";
+    screen.value = "0";
+  } else if (value === "←") {
+    expression = "";
+    screen.value = "0";
+  } else {
     return;
   }
+}
+
   if (value === "C") {
     expression = "";
     screen.value = "0";
@@ -646,29 +647,38 @@ if (expression.includes("|")) {
   return;
 }
 
-  try {
-    const original = expression;
-    const result = parseAndEvaluate(expression);
-    const formatted = formatResult(result);
-    if (["Overflow", "Too Low", "Undefined"].includes(formatted)) {
-      screen.value = formatted;
-      expression = "";
+try {
+  const original = expression;
+  const result = parseAndEvaluate(expression);
+
+  // If result is NaN, treat as "Undefined"
+  if (isNaN(result)) {
+    screen.value = "Undefined";
+    expression = "";
+    return;
+  }
+
+  const formatted = formatResult(result);
+  screen.value = formatted;
+  if (!["Overflow", "Too Low"].includes(formatted)) {
+    if (Math.abs(result) >= 1e7 || (Math.abs(result) > 0 && Math.abs(result) < 1e-7)) {
+      expression = simplifyExponential(result.toExponential());
     } else {
-      screen.value = formatted;
-      if (Math.abs(result) >= 1e7 || (Math.abs(result) > 0 && Math.abs(result) < 1e-7)) {
-        expression = simplifyExponential(result.toExponential());
-      } else {
-        expression = result.toString();
-      }
-      const date = getFormattedDate();
-      const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
-      history.push({ expr: original, result: formatted, date, time: Date.now() });
-      localStorage.setItem("calcHistory", JSON.stringify(history));
+      expression = result.toString();
     }
-  } catch {
-    screen.value = "Error";
+  } else {
     expression = "";
   }
+
+  const date = getFormattedDate();
+  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+  history.push({ expr: original, result: formatted, date, time: Date.now() });
+  localStorage.setItem("calcHistory", JSON.stringify(history));
+} catch {
+  screen.value = "Error";
+  expression = "";
+}
+
   return;
 }
 
@@ -684,11 +694,13 @@ if (expression.includes("|")) {
     updateDisplay();
     return;
   }
-  if (value === "&√") {
-    if (/[0-9)]$/.test(expression)) expression += "&√";
-    updateDisplay();
-    return;
-  }
+if (value === "&√") {
+  if (/[0-9)]$/.test(expression)) expression += "*";
+  expression += "&√";
+  updateDisplay();
+  return;
+}
+
   if (value === "!") {
     if (/[0-9)]$/.test(expression)) expression += "!";
     updateDisplay();
@@ -732,6 +744,35 @@ expr = expr.replace(
       i--;
     }
   }
+  let isDown = false;
+let startX;
+let scrollLeft;
+
+screen.addEventListener('mousedown', (e) => {
+  isDown = true;
+  startX = e.pageX - screen.offsetLeft;
+  scrollLeft = screen.scrollLeft;
+  screen.classList.add('active');
+});
+
+screen.addEventListener('mouseleave', () => {
+  isDown = false;
+  screen.classList.remove('active');
+});
+
+screen.addEventListener('mouseup', () => {
+  isDown = false;
+  screen.classList.remove('active');
+});
+
+screen.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - screen.offsetLeft;
+  const walk = (x - startX) * 1;
+  screen.scrollLeft = scrollLeft - walk;
+});
+
   let pos = 0;
   function peek() { return tokens[pos]; }
   function consume() { return tokens[pos++]; }
@@ -780,7 +821,7 @@ expr = expr.replace(
     while (peek() === "*" || peek() === "/") {
       const op = consume();
       const right = parseFactor();
-      if (op === "/" && right === 0) throw "";
+if (op === "/" && right === 0) val = val / right; // JavaScript will return Infinity or -Infinity
       val = op === "*" ? val * right : val / right;
     }
     return val;
@@ -1247,49 +1288,37 @@ function switchTab(tab) {
   }
 }
 
-const allowed = /[0-9\.\+\-\×\÷\*\/\^\(\)\%\:\;eEπ√\!\&\|]/;
-screen.addEventListener('paste', function(e) {
-  e.preventDefault();
-  const txt = (e.clipboardData || window.clipboardData).getData('text');
-  let filtered = '';
-  for (let ch of txt) {
-    if (allowed.test(ch)) {
-      if (ch === '*') ch = '×';
-      else if (ch === '/') ch = '÷';
-      else if (ch === ':') ch = '%:';
-      filtered += ch;
-    }
-  }
-  expression = filtered;
-  updateDisplay();
-});
-
-let inputTimeout = null;
-let lastKeyTime = 0;
-
+const errorStates = ["Overflow", "Too Low", "Undefined", "Error"];
 screen.addEventListener('keydown', (e) => {
   const now = Date.now();
 
-  // Prevent double-triggering if keys come too fast (less than 30ms apart)
   if (now - lastKeyTime < 30) {
     e.preventDefault();
     return;
   }
   lastKeyTime = now;
 
-  // Clear any queued reformatting
   if (inputTimeout) clearTimeout(inputTimeout);
-
-  // Schedule display reformatting a bit later (helps when typing very fast)
   inputTimeout = setTimeout(() => {
     updateDisplay();
   }, 50);
+
+  // If in error state, only allow clearing keys
+  if (errorStates.includes(screen.value)) {
+    if (e.key === "Backspace" || e.key === "Enter" || e.key === "c" || e.key === "C") {
+      return; // allow these keys
+    } else {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  const allowedKeys = /^[0-9+\-*/().^%!√π&|;:=\\nrx]$/i;
+  if (!allowedKeys.test(e.key) && e.key !== "Backspace" && e.key !== "Enter") {
+    e.preventDefault();
+  }
 });
 
-const allowedKeys = /^[0-9+\-*/().^%!√π&|;:=\\nrx]$/i;
-if (!allowedKeys.test(e.key) && e.key !== "Backspace" && e.key !== "Enter") {
-  e.preventDefault();
-}
 
 
 </script>
