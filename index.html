@@ -145,13 +145,6 @@
       color: darkgray;
     }
 
-#historyListContainer {
-  flex: 1;
-  overflow-y: auto;
-  max-height: 100%;
-  padding-bottom: 10px;
-}
-
     .modal-entry {
       display: flex;
       align-items: center;
@@ -746,34 +739,6 @@ expr = expr.replace(
       i--;
     }
   }
-  let isDown = false;
-let startX;
-let scrollLeft;
-
-screen.addEventListener('mousedown', (e) => {
-  isDown = true;
-  startX = e.pageX - screen.offsetLeft;
-  scrollLeft = screen.scrollLeft;
-  screen.classList.add('active');
-});
-
-screen.addEventListener('mouseleave', () => {
-  isDown = false;
-  screen.classList.remove('active');
-});
-
-screen.addEventListener('mouseup', () => {
-  isDown = false;
-  screen.classList.remove('active');
-});
-
-screen.addEventListener('mousemove', (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-  const x = e.pageX - screen.offsetLeft;
-  const walk = (x - startX) * 1;
-  screen.scrollLeft = scrollLeft - walk;
-});
 
   let pos = 0;
   function peek() { return tokens[pos]; }
@@ -955,34 +920,6 @@ function toggleSelectMode() {
   }
 }
 
-function deleteSelected() {
-  const checkboxes = historyList.querySelectorAll(".entry-checkbox");
-  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
-  const toKeep = [];
-  checkboxes.forEach((cb) => {
-    const idx = parseInt(cb.dataset.index, 10);
-    if (!cb.checked) {
-      if (history[idx]) {
-        toKeep.push(history[idx]);
-      }
-    }
-  });
-  localStorage.setItem("calcHistory", JSON.stringify(toKeep));
-  showHistory();
-}
-function selectAll() {
-  const checkboxes = historyList.querySelectorAll(".entry-checkbox");
-  let anyUnchecked = false;
-  checkboxes.forEach(cb => {
-    if (!cb.checked) anyUnchecked = true;
-  });
-  if (anyUnchecked) {
-    checkboxes.forEach(cb => { cb.checked = true; });
-  } else {
-    checkboxes.forEach(cb => { cb.checked = false; });
-  }
-}
-
 screen.addEventListener('input', () => {
   expression = screen.value;
   updateDisplay();
@@ -1158,73 +1095,6 @@ function selectAll() {
     btn.textContent = "Deselect All";
   }
 }
-
-function showHistory() {
-  isSelectMode = false;
-  selectToggle.classList.remove("active");
-  selectToggle.innerText = "Select";
-  deleteContainer.style.display = "none";
-  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
-  const sixMonths = 1000 * 60 * 60 * 24 * 30.44 * 6;
-  const now = Date.now();
-  const filtered = history.filter(entry => now - entry.time <= sixMonths);
-  localStorage.setItem("calcHistory", JSON.stringify(filtered));
-  historyList.innerHTML = "";
-  for (let i = filtered.length - 1; i >= 0; i--) {
-    const entry = filtered[i];
-    const div = document.createElement("div");
-    div.className = "modal-entry";
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "entry-checkbox";
-    checkbox.style.display = "none";
-    checkbox.dataset.index = i;
-    const textSpan = document.createElement("span");
-    textSpan.className = "entry-text";
-    textSpan.textContent = `${addCommasToNumbers(entry.expr)} = ${entry.result} (${entry.date})`;
-    const buttonsDiv = document.createElement("div");
-    buttonsDiv.className = "entry-buttons";
-    const copyBtn = document.createElement("button");
-    copyBtn.className = "entry-button";
-    copyBtn.innerText = "Copy";
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(`${entry.expr} = ${entry.result}`).catch(() => {});
-      copyBtn.classList.add("copied");
-      copyBtn.innerText = "Copied!";
-      setTimeout(() => {
-        copyBtn.classList.remove("copied");
-        copyBtn.innerText = "Copy";
-      }, 700);
-    };
-    const viewBtn = document.createElement("button");
-    viewBtn.className = "entry-button";
-    viewBtn.innerText = "View";
-    viewBtn.onclick = () => {
-      expression = entry.expr;
-      updateDisplay();
-      closeHistory();
-    };
-    buttonsDiv.appendChild(copyBtn);
-    buttonsDiv.appendChild(viewBtn);
-    div.appendChild(checkbox);
-    div.appendChild(textSpan);
-    div.appendChild(buttonsDiv);
-    historyList.appendChild(div);
-  }
-  historyModal.style.display = "flex";
-}
-
-const display = document.getElementById('display');
-let isDown = false;
-let startX;
-let scrollLeft;
-
-display.addEventListener('mousedown', e => {
-  isDown = true;
-  display.classList.add('active');
-  startX = e.pageX - display.offsetLeft;
-  scrollLeft = display.scrollLeft;
-});
 
 display.addEventListener('mouseleave', () => {
   isDown = false;
