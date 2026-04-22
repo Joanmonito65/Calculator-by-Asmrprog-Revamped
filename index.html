@@ -399,6 +399,19 @@ border-radius: 50%; background: #888; flex-shrink: 0;
 .fraction-toggle-btn.on { background: rgba(40, 200, 120, 0.22); }
 .fraction-toggle-btn.on .dot { background: #18a34a; }
 
+.fraction-toggle-btn.sub {
+  font-size: 13px;
+  padding: 8px 12px;
+  margin: -6px 0 12px 16px;
+  width: calc(100% - 16px);
+  font-weight: 600;
+  opacity: 0.85;
+}
+.fraction-toggle-btn.sub .dot {
+  width: 8px;
+  height: 8px;
+}
+
   </style>
 </head>
 <body>
@@ -478,6 +491,11 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   <span id="fractionToggleText">Fractions: OFF</span>
 </button>
 
+<button id="improperToggle" class="fraction-toggle-btn sub" onclick="toggleImproper()" style="display:none;">
+  <span class="dot"></span>
+  <span id="improperToggleText">Improper Fractions: OFF</span>
+</button>
+
   <div class="modal-header">
     <h2>Information</h2>
   </div>
@@ -522,6 +540,7 @@ const fractionToggle = document.getElementById("fractionToggle");
 const fractionToggleText = document.getElementById("fractionToggleText");
 let useFractions = false;
 let isSelectMode = false;
+let useImproper = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -580,14 +599,19 @@ function decimalToMixedFraction(num, maxDen = 1000) {
     const error = Math.abs(fracPart - n / d);
     if (error < bestError) { bestError = error; bestN = n; bestD = d; if (error < 1e-12) break; }
   }
+
   const g = gcd(bestN, bestD);
   bestN /= g; bestD /= g;
+
+  if (useImproper) {
+    const totalN = whole * bestD + bestN;
+    return (sign < 0 ? "-" : "") + `${totalN}/${bestD}`;
+  }
+
   let result = whole !== 0 ? String(whole) : "";
   if (bestN !== 0) result += (whole !== 0 ? " " : "") + `${bestN}/${bestD}`;
   return (sign < 0 ? "-" : "") + (result || "0");
 }
-
-
 
 function formatResult(num) {
   if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined";
@@ -706,7 +730,6 @@ try {
   const original = expression;
   const result = parseAndEvaluate(expression);
 
-  // If result is NaN, treat as "Undefined"
   if (isNaN(result)) {
     screen.value = "Undefined";
     expression = "";
@@ -857,7 +880,7 @@ for (let i = 0; i < tokens.length; i++) {
     while (peek() === "*" || peek() === "/") {
       const op = consume();
       const right = parseFactor();
-if (op === "/" && right === 0) val = val / right; // JavaScript will return Infinity or -Infinity
+if (op === "/" && right === 0) val = val / right;
       val = op === "*" ? val * right : val / right;
     }
     return val;
@@ -1244,10 +1267,9 @@ screen.addEventListener('keydown', (e) => {
     updateDisplay();
   }, 50);
 
-  // If in error state, only allow clearing keys
   if (errorStates.includes(screen.value)) {
     if (e.key === "Backspace" || e.key === "Enter" || e.key === "c" || e.key === "C") {
-      return; // allow these keys
+      return;
     } else {
       e.preventDefault();
       return;
@@ -1260,10 +1282,23 @@ screen.addEventListener('keydown', (e) => {
   }
 });
 
+function toggleImproper() {
+  useImproper = !useImproper;
+  document.getElementById("improperToggle").classList.toggle("on", useImproper);
+  document.getElementById("improperToggleText").textContent = useImproper ? "Improper Fractions: ON" : "Improper Fractions: OFF";
+}
+
 function toggleFractions() {
   useFractions = !useFractions;
   fractionToggle.classList.toggle("on", useFractions);
   fractionToggleText.textContent = useFractions ? "Fractions: ON" : "Fractions: OFF";
+  const improperToggle = document.getElementById("improperToggle");
+  improperToggle.style.display = useFractions ? "flex" : "none";
+  if (!useFractions) {
+    useImproper = false;
+    improperToggle.classList.remove("on");
+    document.getElementById("improperToggleText").textContent = "Improper Fractions: OFF";
+  }
 }
 
 </script>
