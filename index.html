@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -56,323 +57,347 @@
       cursor: grab;
       user-select: text;
 
-  }
+}
 
-  #display.active {
-    cursor: grabbing;
-      
-    }
-    #display::-ms-clear,
-    #display::-ms-reveal,
-    #display::-webkit-search-decoration,
-    #display::-webkit-search-cancel-button,
-    #display::-webkit-search-results-button,
-    #display::-webkit-search-results-decoration {
-      display: none;
-    }
+#display.active {
+cursor: grabbing;
 
-    .history-button {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-      border-radius: 50%;
-      border: none;
-      width: 40px;
-      height: 40px;
-      font-size: 24px;
-      color: black;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    .entry-button.copied {
-     background: none;
-     border: none;
-     color: green;
-     font-weight: bold;
-     pointer-events: none;
-    }
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
+}
+#display::-ms-clear,
+#display::-ms-reveal,
+#display::-webkit-search-decoration,
+#display::-webkit-search-cancel-button,
+#display::-webkit-search-results-button,
+#display::-webkit-search-results-decoration {
+  display: none;
+}
+
+.history-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.entry-button.copied {
+ background: none;
+ border: none;
+ color: green;
+ font-weight: bold;
+ pointer-events: none;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
 
 .modal-content {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+background: white;
+border-radius: 10px;
+padding: 20px;
+width: 90%;
+max-width: 400px;
+height: 70vh;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .modal h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-    .select-button {
-      background: none;
-      border: none;
-      color: gray;
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .select-button.active {
-      color: darkgray;
-    }
-
-    .modal-entry {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 16px;
-      margin: 6px 0;
-    }
-    .entry-text {
-      flex: 1;
-      margin-right: 8px;
-      word-break: break-all;
-    }
-    .entry-buttons {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-    .entry-button {
-      background: none;
-      border: none;
-      color: gray;
-      padding: 2px 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .entry-checkbox {
-      margin-right: 8px;
-      flex-shrink: 0;
-    }
-
-    .delete-button {
-      background: none;
-      border: none;
-      color: gray;
-      border-radius: 4px;
-      padding: 6px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .select-all-button {
-      background: none;
-      border: none;
-      color: gray;
-      border-radius: 4px;
-      padding: 6px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .calc-buttons {
-      flex-grow: 1;
-    }
-    .calc-button-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 5% 0;
-      gap: 10px;
-    }
-    .calc-button {
-      backdrop-filter: blur(5.5px);
-      -webkit-backdrop-filter: blur(5.5px);
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.01);
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
-      color: #232323;
-      font-family: inherit;
-      font-size: 24px;
-      height: 65px;
-      transition: background-color 0.2s;
-      user-select: none;
-      flex: 1;
-    }
-    .calc-button:active { background-color: #ffef78; }
-    .calc-button.purple {
-      background: #d72880;
-      color: #fff;
-    }
-    .calc-button.purple:hover { filter: brightness(110%); }
-    .calc-button-row:last-child .calc-button { flex: 1; }
-
-    .confirm-delete-popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      backdrop-filter: blur(3px);
-      background: rgba(0, 0, 0, 0.4);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .confirm-box {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    .confirm-box p {
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
-    .confirm-buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    #confirmDeleteBtn {
-      background-color: transparent;
-      color: #D91414;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 1.25em;
-    }
-    #cancelDeleteBtn {
-      background-color: transparent;
-      color: #0E77E8;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 1.25em;
-    }
-
-#historyModal .modal-content {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  max-height: 70vh;
-  height: 70vh;
+.modal-header {
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
-
-#infoModal .modal-header h2 {
+.modal h2 {
   margin: 0;
   font-size: 20px;
-  font-weight: bold;
-  text-align: left;
 }
-
-.modal-body {
-  margin-top: 10px;
-  font-size: 16px;
-  text-align: left;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: transparent;
-  font-family: inherit;
-  padding: 0;
-  width: 100%;
-  box-sizing: border-box;
+.select-button {
+  background: none;
   border: none;
-  resize: none;
-  outline: none;
-  max-height: 100%;
+  color: gray;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.select-button.active {
+  color: darkgray;
 }
 
-.tab-switcher {
+.modal-entry {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: 6px 0;
+}
+.entry-text {
+  flex: 1;
+  margin-right: 8px;
+  word-break: break-all;
+}
+.entry-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.entry-button {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 2px 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.entry-checkbox {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: gray;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.select-all-button {
+  background: none;
+  border: none;
+  color: gray;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.calc-buttons {
+  flex-grow: 1;
+}
+.calc-button-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5% 0;
   gap: 10px;
 }
-
-.tab {
+.calc-button {
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.01);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  color: #232323;
+  font-family: inherit;
+  font-size: 24px;
+  height: 65px;
+  transition: background-color 0.2s;
+  user-select: none;
   flex: 1;
-  padding: 8px;
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: 20px;
-  font-size: 15px;
-  cursor: pointer;
-  color: #555;
-  transition: all 0.2s;
 }
-
-.tab.active {
-  border-color: black;
-  color: black;
-  background-color: transparent;
+.calc-button:active { background-color: #ffef78; }
+.calc-button.purple {
+  background: #d72880;
+  color: #fff;
 }
+.calc-button.purple:hover { filter: brightness(110%); }
+.calc-button-row:last-child .calc-button { flex: 1; }
 
-#infoContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.confirm-delete-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
-
-#historyContent {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-#historyListContainer {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.delete-button-container {
-  position: sticky;
-  bottom: 0;
+.confirm-box {
   background: white;
-  z-index: 10;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.confirm-box p {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+.confirm-buttons {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px;
-  border-top: 1px solid #ccc;
 }
+#confirmDeleteBtn {
+  background-color: transparent;
+  color: #D91414;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 1.25em;
+}
+#cancelDeleteBtn {
+  background-color: transparent;
+  color: #0E77E8;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 1.25em;
+}
+
+#historyModal .modal-content {
+background: white;
+border-radius: 10px;
+padding: 20px;
+width: 90%;
+max-width: 400px;
+max-height: 70vh;
+height: 70vh;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+#infoModal .modal-header h2 {
+margin: 0;
+font-size: 20px;
+font-weight: bold;
+text-align: left;
+}
+
+.modal-body {
+margin-top: 10px;
+font-size: 16px;
+text-align: left;
+flex: 1;
+overflow-y: auto;
+overflow-x: hidden;
+background: transparent;
+font-family: inherit;
+padding: 0;
+width: 100%;
+box-sizing: border-box;
+border: none;
+resize: none;
+outline: none;
+max-height: 100%;
+}
+
+.tab-switcher {
+display: flex;
+justify-content: space-around;
+margin-bottom: 10px;
+gap: 10px;
+}
+
+.tab {
+flex: 1;
+padding: 8px;
+background: transparent;
+border: 2px solid transparent;
+border-radius: 20px;
+font-size: 15px;
+cursor: pointer;
+color: #555;
+transition: all 0.2s;
+}
+
+.tab.active {
+border-color: black;
+color: black;
+background-color: transparent;
+}
+
+#infoContent {
+flex: 1;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+#historyContent {
+display: flex;
+flex-direction: column;
+height: 100%;
+overflow: hidden;
+}
+
+#historyListContainer {
+flex: 1;
+overflow-y: auto;
+padding-bottom: 10px;
+-webkit-overflow-scrolling: touch;
+}
+
+.delete-button-container {
+position: sticky;
+bottom: 0;
+background: white;
+z-index: 10;
+display: flex;
+justify-content: space-between;
+gap: 10px;
+padding: 10px;
+border-top: 1px solid #ccc;
+}
+
+.fraction-toggle-btn {
+width: 100%;
+padding: 12px 14px;
+border-radius: 14px;
+border: none;
+margin: 0 0 12px 0;
+cursor: pointer;
+font-weight: 700;
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: rgba(255,255,255,0.65);
+backdrop-filter: blur(10px);
+box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+transition: transform 0.2s, background 0.2s;
+}
+.fraction-toggle-btn:hover { transform: scale(1.01); }
+.fraction-toggle-btn .dot {
+width: 10px; height: 10px;
+border-radius: 50%; background: #888; flex-shrink: 0;
+}
+.fraction-toggle-btn.on { background: rgba(40, 200, 120, 0.22); }
+.fraction-toggle-btn.on .dot { background: #18a34a; }
 
   </style>
 </head>
@@ -381,90 +406,98 @@
     <button class="history-button" onclick="showHistory()">∨</button>
     <input id="display" type="text" value="0" dir="ltr"/>
 
-    <section class="calc-buttons">
-      <div class="calc-button-row">
-        <button class="calc-button" onclick="buttonClick('C')">C</button>
-        <button class="calc-button" onclick="buttonClick('←')">←</button>
-        <button class="calc-button purple" onclick="buttonClick('(')">(</button>
-        <button class="calc-button purple" onclick="buttonClick(')')">)</button>
-      </div>
-      <div class="calc-button-row">
-        <button class="calc-button" onclick="buttonClick('7')">7</button>
-        <button class="calc-button" onclick="buttonClick('8')">8</button>
-        <button class="calc-button" onclick="buttonClick('9')">9</button>
-        <button class="calc-button purple" onclick="buttonClick('÷')">÷</button>
-      </div>
-      <div class="calc-button-row">
-        <button class="calc-button" onclick="buttonClick('4')">4</button>
-        <button class="calc-button" onclick="buttonClick('5')">5</button>
-        <button class="calc-button" onclick="buttonClick('6')">6</button>
-        <button class="calc-button purple" onclick="buttonClick('×')">×</button>
-      </div>
-      <div class="calc-button-row">
-        <button class="calc-button" onclick="buttonClick('1')">1</button>
-        <button class="calc-button" onclick="buttonClick('2')">2</button>
-        <button class="calc-button" onclick="buttonClick('3')">3</button>
-        <button class="calc-button purple" onclick="buttonClick('−')">−</button>
-      </div>
-      <div class="calc-button-row">
-        <button class="calc-button" onclick="buttonClick('π')">π</button>
-        <button class="calc-button" onclick="buttonClick('0')">0</button>
-        <button class="calc-button" onclick="buttonClick('.')">.</button>
-        <button class="calc-button purple" onclick="buttonClick('+')">+</button>
-      </div>
-      <div class="calc-button-row">
-        <button class="calc-button purple" onclick="buttonClick('^')">^</button>
-        <button class="calc-button purple" onclick="buttonClick('√')">√</button>
-        <button class="calc-button purple" onclick="buttonClick('!')">!</button>
-        <button class="calc-button purple" onclick="buttonClick('=')">=</button>
-      </div>
-    </section>
+<section class="calc-buttons">
+  <div class="calc-button-row">
+    <button class="calc-button" onclick="buttonClick('C')">C</button>
+    <button class="calc-button" onclick="buttonClick('←')">←</button>
+    <button class="calc-button purple" onclick="buttonClick('(')">(</button>
+    <button class="calc-button purple" onclick="buttonClick(')')">)</button>
+  </div>
+  <div class="calc-button-row">
+    <button class="calc-button" onclick="buttonClick('7')">7</button>
+    <button class="calc-button" onclick="buttonClick('8')">8</button>
+    <button class="calc-button" onclick="buttonClick('9')">9</button>
+    <button class="calc-button purple" onclick="buttonClick('÷')">÷</button>
+  </div>
+  <div class="calc-button-row">
+    <button class="calc-button" onclick="buttonClick('4')">4</button>
+    <button class="calc-button" onclick="buttonClick('5')">5</button>
+    <button class="calc-button" onclick="buttonClick('6')">6</button>
+    <button class="calc-button purple" onclick="buttonClick('×')">×</button>
+  </div>
+  <div class="calc-button-row">
+    <button class="calc-button" onclick="buttonClick('1')">1</button>
+    <button class="calc-button" onclick="buttonClick('2')">2</button>
+    <button class="calc-button" onclick="buttonClick('3')">3</button>
+    <button class="calc-button purple" onclick="buttonClick('−')">−</button>
+  </div>
+  <div class="calc-button-row">
+    <button class="calc-button" onclick="buttonClick('π')">π</button>
+    <button class="calc-button" onclick="buttonClick('0')">0</button>
+    <button class="calc-button" onclick="buttonClick('.')">.</button>
+    <button class="calc-button purple" onclick="buttonClick('+')">+</button>
+  </div>
+  <div class="calc-button-row">
+    <button class="calc-button purple" onclick="buttonClick('^')">^</button>
+    <button class="calc-button purple" onclick="buttonClick('√')">√</button>
+    <button class="calc-button purple" onclick="buttonClick('!')">!</button>
+    <button class="calc-button purple" onclick="buttonClick('=')">=</button>
+  </div>
+</section>
+
   </div>
 
 <div class="modal" id="historyModal" onclick="closeHistory(event)">
   <div class="modal-content" onclick="event.stopPropagation()">
-    
-    <div class="tab-switcher">
-      <button id="historyTab" class="tab active" onclick="switchTab('history')">Calculation History</button>
-      <button id="infoTab" class="tab" onclick="switchTab('info')">Information</button>
-    </div>
 
-    <div id="historyContent">
-      <div class="modal-header">
-        <h2>Calculation History</h2>
-        <button class="select-button" id="selectToggle" onclick="toggleSelectMode()">Select</button>
-      </div>
+<div class="tab-switcher">
+  <button id="historyTab" class="tab active" onclick="switchTab('history')">Calculation History</button>
+  <button id="infoTab" class="tab" onclick="switchTab('info')">Information</button>
+</div>
 
-      <div id="historyListContainer">
-        <div id="historyList"></div>
-      </div>
+<div id="historyContent">
+  <div class="modal-header">
+    <h2>Calculation History</h2>
+    <button class="select-button" id="selectToggle" onclick="toggleSelectMode()">Select</button>
+  </div>
 
-      <div class="delete-button-container" id="deleteContainer">
-        <button class="delete-button" onclick="deleteSelected()">Delete</button>
-        <button class="select-all-button" id="selectAllBtn" onclick="selectAll()">Select All</button>
-      </div>
-    </div>
+  <div id="historyListContainer">
+    <div id="historyList"></div>
+  </div>
 
-    <div id="infoContent" style="display: none;">
-      <div class="modal-header">
-        <h2>Information</h2>
-      </div>
-      <div class="modal-body" id="infoText"> This advanced calculator application offers a comprehensive suite of features, catering to both basic arithmetic and more complex mathematical operations. It presents a clean, user-friendly interface with a prominent display at the top, ensuring that current calculations are always clearly visible. Below the display, a well-organized keypad provides access to numbers, standard operators, and specialized functions. The design emphasizes ease of use, making it accessible for a wide range of computational needs.
+  <div class="delete-button-container" id="deleteContainer">
+    <button class="delete-button" onclick="deleteSelected()">Delete</button>
+    <button class="select-all-button" id="selectAllBtn" onclick="selectAll()">Select All</button>
+  </div>
+</div>
 
-One of the standout features of this calculator is its robust history functionality. By clicking the "∨" button at the top left, users can access a modal window displaying a detailed log of past calculations. This history is not merely a record; it's interactive. Each entry shows the full expression and its result, along with the date it was computed. Users have the convenience of copying individual entries to their clipboard or instantly recalling an expression to the main display for further modification or re-evaluation.
+<div id="infoContent" style="display: none;">
 
-The history feature also includes powerful management tools. Within the history modal, a "Select" button allows users to enter a selection mode, enabling them to choose multiple entries for deletion. This is particularly useful for managing a long list of calculations, allowing for quick cleanup of irrelevant data. A "Select All" option further streamlines this process, while a confirmation pop-up ensures that accidental deletions are prevented, prompting the user to confirm their intent before any data is permanently removed. This meticulous attention to user control enhances the overall experience.
+<button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
+  <span class="dot"></span>
+  <span id="fractionToggleText">Fractions: OFF</span>
+</button>
+
+  <div class="modal-header">
+    <h2>Information</h2>
+  </div>
+  <div class="modal-body" id="infoText"> This advanced calculator application offers a comprehensive suite of features, catering to both basic arithmetic and more complex mathematical operations. It presents a clean, user-friendly interface with a prominent display at the top, ensuring that current calculations are always clearly visible. Below the display, a well-organized keypad provides access to numbers, standard operators, and specialized functions. The design emphasizes ease of use, making it accessible for a wide range of computational needs.
+
+One of the standout features of this calculator is its robust history functionality. By clicking the “∨” button at the top left, users can access a modal window displaying a detailed log of past calculations. This history is not merely a record; it’s interactive. Each entry shows the full expression and its result, along with the date it was computed. Users have the convenience of copying individual entries to their clipboard or instantly recalling an expression to the main display for further modification or re-evaluation.
+
+The history feature also includes powerful management tools. Within the history modal, a “Select” button allows users to enter a selection mode, enabling them to choose multiple entries for deletion. This is particularly useful for managing a long list of calculations, allowing for quick cleanup of irrelevant data. A “Select All” option further streamlines this process, while a confirmation pop-up ensures that accidental deletions are prevented, prompting the user to confirm their intent before any data is permanently removed. This meticulous attention to user control enhances the overall experience.
 
 Beyond standard operations, this calculator incorporates several advanced mathematical functions, including exponents (^), square roots (√), and factorials (!). These functions are readily available on the keypad, allowing for more sophisticated calculations. The calculator also supports the use of the mathematical constant pi (π), providing precise values for calculations involving circles or other related formulas. The display intelligently handles large numbers, using scientific notation when appropriate and automatically adding commas for readability, which significantly improves the comprehension of complex results.
 
-A unique aspect of this calculator is its support for special input characters, enhancing its versatility beyond a standard physical calculator. The &√ character combination allows for calculating any root of a number, meaning you can find cube roots, fourth roots, and so on, not just square roots. The backslash \ acts as a division symbol, automatically converting to a forward slash / for clear fraction representation. Furthermore, the semicolon ; can be used after a fraction (e.g., 1/4;100) to quickly calculate a fraction of a given number, providing an immediate percentage-like result without extra steps. The | (divisible) character is also available, displaying "True (by x)" or "False (by x)" as the answer. Lastly, the %:  combination is specifically designed to calculate a certain percentage of a number, offering a direct and intuitive way to handle percentage-based calculations.
+A unique aspect of this calculator is its support for special input characters, enhancing its versatility beyond a standard physical calculator. The &√ character combination allows for calculating any root of a number, meaning you can find cube roots, fourth roots, and so on, not just square roots. The backslash \ acts as a division symbol, automatically converting to a forward slash / for clear fraction representation. Furthermore, the semicolon ; can be used after a fraction (e.g., 1/4;100) to quickly calculate a fraction of a given number, providing an immediate percentage-like result without extra steps. The | (divisible) character is also available, displaying “True (by x)” or “False (by x)” as the answer. Lastly, the %:  combination is specifically designed to calculate a certain percentage of a number, offering a direct and intuitive way to handle percentage-based calculations.
 
-The calculator boasts intuitive input handling, responding not only to button clicks but also to keyboard input. Users can type numbers and operators directly, and common keys like "Enter" or "=" will trigger the calculation, while "Backspace" acts as a clear last character function. This dual input method provides flexibility, allowing users to choose their preferred interaction style. The display itself is interactive, allowing users to scroll horizontally to view long expressions, ensuring that even complex equations fit within the visible area.
+The calculator boasts intuitive input handling, responding not only to button clicks but also to keyboard input. Users can type numbers and operators directly, and common keys like “Enter” or “=” will trigger the calculation, while “Backspace” acts as a clear last character function. This dual input method provides flexibility, allowing users to choose their preferred interaction style. The display itself is interactive, allowing users to scroll horizontally to view long expressions, ensuring that even complex equations fit within the visible area.
 
-This enhanced calculator was originally conceived by the YouTube channel "AsmrProg" as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.                                           
-Text here for coding purposes                                   
-Text here for coding purposes                                    
-Text here for coding purposes                                       
+This enhanced calculator was originally conceived by the YouTube channel “AsmrProg” as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.  
+Text here for coding purposes  
+Text here for coding purposes  
+Text here for coding purposes
+
 </div>
     </div>
 
@@ -489,6 +522,9 @@ const selectToggle = document.getElementById("selectToggle");
 const deleteContainer = document.getElementById("deleteContainer");
 let expression = "";
 const piValue = Math.PI;
+const fractionToggle = document.getElementById("fractionToggle");
+const fractionToggleText = document.getElementById("fractionToggleText");
+let useFractions = false;
 let isSelectMode = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
@@ -529,15 +565,43 @@ function simplifyExponential(expStr) {
   const eStr = expNum >= 0 ? "e+" + expNum : "e" + expNum;
   return mant + eStr;
 }
+
+function gcd(a, b) {
+  a = Math.abs(a); b = Math.abs(b);
+  while (b !== 0) { const t = b; b = a % b; a = t; }
+  return a || 1;
+}
+function decimalToMixedFraction(num, maxDen = 1000) {
+  if (!Number.isFinite(num)) return "Undefined";
+  if (Math.abs(num - Math.round(num)) < 1e-12) return String(Math.round(num));
+  const sign = num < 0 ? -1 : 1;
+  num = Math.abs(num);
+  const whole = Math.floor(num);
+  const fracPart = num - whole;
+  let bestN = 0, bestD = 1, bestError = Infinity;
+  for (let d = 1; d <= maxDen; d++) {
+    const n = Math.round(fracPart * d);
+    const error = Math.abs(fracPart - n / d);
+    if (error < bestError) { bestError = error; bestN = n; bestD = d; if (error < 1e-12) break; }
+  }
+  const g = gcd(bestN, bestD);
+  bestN /= g; bestD /= g;
+  let result = whole !== 0 ? String(whole) : "";
+  if (bestN !== 0) result += (whole !== 0 ? " " : "") + `${bestN}/${bestD}`;
+  return (sign < 0 ? "-" : "") + (result || "0");
+}
+
+
+
 function formatResult(num) {
-  if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined"; // treat all bad divisions as Undefined
+  if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined";
+  if (useFractions) return decimalToMixedFraction(num);
   if (Math.abs(num) >= 1e7 || (Math.abs(num) > 0 && Math.abs(num) < 1e-7)) {
     return simplifyExponential(num.toExponential());
   }
   let str = num.toFixed(10).replace(/\.?0+$/, "");
   return str.includes(".") ? str : parseInt(str, 10).toLocaleString("en-US");
 }
-
 
 function buttonClick(value) {
 const errorStates = ["Overflow", "Too Low", "Undefined", "Error"];
@@ -659,7 +723,9 @@ try {
     if (Math.abs(result) >= 1e7 || (Math.abs(result) > 0 && Math.abs(result) < 1e-7)) {
       expression = simplifyExponential(result.toExponential());
     } else {
-      expression = result.toString();
+
+expression = useFractions ? formatted : result.toString();
+
     }
   } else {
     expression = "";
@@ -712,33 +778,40 @@ function factorial(n) {
   return f;
 }
 function parseAndEvaluate(expr) {
+
 expr = expr.replace(
   /(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?);(\d+(?:\.\d+)?)/g,
   '($1/$2)*$3'
 );
+expr = expr.replace(/(^|[+\-*/^(])\s*(\d+)\s+(\d+)\/(\d+)/g, (match, prefix, whole, num, den) => {
+  return `${prefix}(${whole}+(${num}/${den}))`;
+});
 expr = expr.replace(
   /(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)/g,
   '($1/$2)'
 );
-  expr = expr.replace(/,/g, "")
-             .replace(/(\d+(\.\d+)?)%:(\d+(\.\d+)?)/g, "($1/100)*$3")
-             .replace(/÷/g, "/")
-             .replace(/×/g, "*")
-             .replace(/−/g, "-")
-             .replace(/π/g, piValue.toString());
-  expr = expr.replace(/(\d|\))(\s*\()/g, "$1*$2");
-  expr = expr.replace(/(\))(\d|√)/g, "$1*$2");
-  expr = expr.replace(/(\d)(√)/g, "$1*$2");
-  const tokens = tokenize(expr);
-  for (let i = 0; i < tokens.length; i++) {
-    if (tokens[i] === "&√") {
-      const deg = parseFloat(tokens[i - 1]);
-      const rad = parseFloat(tokens[i + 1]);
-      const rootVal = Math.pow(rad, 1 / deg);
-      tokens.splice(i - 1, 3, rootVal.toString());
-      i--;
-    }
+
+expr = expr
+
+  .replace(/,/g, "")
+  .replace(/(\d+(\.\d+)?)%:(\d+(\.\d+)?)/g, "($1/100)*$3")
+  .replace(/÷/g, "/")
+  .replace(/×/g, "*")
+  .replace(/−/g, "-")
+  .replace(/π/g, piValue.toString());
+expr = expr.replace(/(\d|\))(\s*\()/g, "$1*$2");
+expr = expr.replace(/(\))(\d|√)/g, "$1*$2");
+expr = expr.replace(/(\d)(√)/g, "$1*$2");
+const tokens = tokenize(expr);
+for (let i = 0; i < tokens.length; i++) {
+  if (tokens[i] === "&√") {
+    const deg = parseFloat(tokens[i - 1]);
+    const rad = parseFloat(tokens[i + 1]);
+    const rootVal = Math.pow(rad, 1 / deg);
+    tokens.splice(i - 1, 3, rootVal.toString());
+    i--;
   }
+}
 
   let pos = 0;
   function peek() { return tokens[pos]; }
@@ -1191,7 +1264,11 @@ screen.addEventListener('keydown', (e) => {
   }
 });
 
-
+function toggleFractions() {
+  useFractions = !useFractions;
+  fractionToggle.classList.toggle("on", useFractions);
+  fractionToggleText.textContent = useFractions ? "Fractions: ON" : "Fractions: OFF";
+}
 
 </script>
 
