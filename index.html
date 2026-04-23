@@ -485,6 +485,9 @@ border-radius: 50%; background: #888; flex-shrink: 0;
 </div>
 
 <div id="infoContent" style="display: none;">
+  <div class="modal-header">
+    <h2>Information</h2>
+  </div>
 
 <button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
   <span class="dot"></span>
@@ -496,9 +499,11 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   <span id="improperToggleText">Improper Fractions: OFF</span>
 </button>
 
-  <div class="modal-header">
-    <h2>Information</h2>
-  </div>
+<button id="commasToggle" class="fraction-toggle-btn on" onclick="toggleCommas()">
+  <span class="dot"></span>
+  <span id="commasToggleText">Commas: ON</span>
+</button>
+
   <div class="modal-body" id="infoText"> This advanced calculator application offers a comprehensive suite of features, catering to both basic arithmetic and more complex mathematical operations. It presents a clean, user-friendly interface with a prominent display at the top, ensuring that current calculations are always clearly visible. Below the display, a well-organized keypad provides access to numbers, standard operators, and specialized functions. The design emphasizes ease of use, making it accessible for a wide range of computational needs.
 
 One of the standout features of this calculator is its robust history functionality. By clicking the “∨” button at the top left, users can access a modal window displaying a detailed log of past calculations. This history is not merely a record; it’s interactive. Each entry shows the full expression and its result, along with the date it was computed. Users have the convenience of copying individual entries to their clipboard or instantly recalling an expression to the main display for further modification or re-evaluation.
@@ -512,6 +517,9 @@ A unique aspect of this calculator is its support for special input characters, 
 The calculator boasts intuitive input handling, responding not only to button clicks but also to keyboard input. Users can type numbers and operators directly, and common keys like “Enter” or “=” will trigger the calculation, while “Backspace” acts as a clear last character function. This dual input method provides flexibility, allowing users to choose their preferred interaction style. The display itself is interactive, allowing users to scroll horizontally to view long expressions, ensuring that even complex equations fit within the visible area.
 
 This enhanced calculator was originally conceived by the YouTube channel “AsmrProg” as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.  
+
+This calculator includes flexible number formatting options that allow users to switch between multiple display styles depending on their preference or the type of calculation being performed. With the fraction mode enabled, results are automatically converted from decimals into clean, simplified mixed fractions, making them easier to understand in mathematical contexts. Users can also enable improper fraction mode, which converts results into a single numerator over denominator format instead of mixed numbers. If fractions are turned off, the calculator defaults to standard decimal output, ensuring precision and familiarity. Additionally, the calculator provides a comma toggle feature that allows users to add or remove thousands separators in real time, improving readability for large numbers or allowing a cleaner, uninterrupted numeric view when needed
+
 </div>
     </div>
 
@@ -541,12 +549,14 @@ const fractionToggleText = document.getElementById("fractionToggleText");
 let useFractions = false;
 let isSelectMode = false;
 let useImproper = false;
+let useCommas = true;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
   });
 }
 function addCommasToNumbers(expr) {
+ if (!useCommas) return expr;
   return expr.replace(/\d+(\.\d+)?/g, (match) => {
     if (match.includes(".")) {
       const parts = match.split(".");
@@ -1299,6 +1309,13 @@ function toggleFractions() {
     improperToggle.classList.remove("on");
     document.getElementById("improperToggleText").textContent = "Improper Fractions: OFF";
   }
+}
+
+function toggleCommas() {
+  useCommas = !useCommas;
+  document.getElementById("commasToggle").classList.toggle("on", useCommas);
+  document.getElementById("commasToggleText").textContent = useCommas ? "Commas: ON" : "Commas: OFF";
+  updateDisplay();
 }
 
 </script>
