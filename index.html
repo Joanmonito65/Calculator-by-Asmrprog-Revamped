@@ -412,6 +412,13 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   height: 8px;
 }
 
+#settingsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
   </style>
 </head>
 <body>
@@ -464,7 +471,8 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   <div class="modal-content" onclick="event.stopPropagation()">
 
 <div class="tab-switcher">
-  <button id="historyTab" class="tab active" onclick="switchTab('history')">Calculation History</button>
+  <button id="historyTab" class="tab active" onclick="switchTab('history')">History</button>
+  <button id="settingsTab" class="tab" onclick="switchTab('settings')">Settings</button>
   <button id="infoTab" class="tab" onclick="switchTab('info')">Information</button>
 </div>
 
@@ -486,26 +494,6 @@ border-radius: 50%; background: #888; flex-shrink: 0;
 
 <div id="infoContent" style="display: none;">
 
-<button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
-  <span class="dot"></span>
-  <span id="fractionToggleText">Fractions: OFF</span>
-</button>
-
-<button id="improperToggle" class="fraction-toggle-btn sub" onclick="toggleImproper()" style="display:none;">
-  <span class="dot"></span>
-  <span id="improperToggleText">Improper Fractions: OFF</span>
-</button>
-
-<button id="commasToggle" class="fraction-toggle-btn on" onclick="toggleCommas()">
-  <span class="dot"></span>
-  <span id="commasToggleText">Commas: ON</span>
-</button>
-
-<button id="separatorToggle" class="fraction-toggle-btn sub" onclick="toggleSeparator()">
-  <span class="dot"></span>
-  <span id="separatorToggleText">European Style: OFF</span>
-</button>
-
   <div class="modal-header">
     <h2>Information</h2>
   </div>
@@ -524,10 +512,36 @@ The calculator boasts intuitive input handling, responding not only to button cl
 
 This enhanced calculator was originally conceived by the YouTube channel “AsmrProg” as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.  
 
-This calculator includes flexible number formatting options that allow users to switch between multiple display styles depending on their preference or the type of calculation being performed. With the fraction mode enabled, results are automatically converted from decimals into clean, simplified mixed fractions, making them easier to understand in mathematical contexts. Users can also enable improper fraction mode, which converts results into a single numerator over denominator format instead of mixed numbers. If fractions are turned off, the calculator defaults to standard decimal output, ensuring precision and familiarity. Additionally, the calculator provides a comma toggle feature that allows users to add or remove thousands separators in real time, improving readability for large numbers or allowing a cleaner, uninterrupted numeric view when needed
+This calculator includes flexible number formatting options that allow users to switch between multiple display styles depending on their preference or the type of calculation being performed. All of these controls are conveniently located in the Settings tab, where users can quickly toggle features on or off. With fraction mode enabled, results are automatically converted from decimals into clean, simplified mixed fractions, and users can also turn on improper fraction mode to display results as a single numerator over denominator. If fractions are turned off, the calculator defaults to standard decimal output, ensuring precision and familiarity. Additionally, the comma toggle allows users to add or remove thousands separators, and a sub-option—similar to the improper fraction setting—lets users switch to a European-style number format for even greater customization.
 
 </div>
     </div>
+
+<div id="settingsContent" style="display: none;">
+  <div class="modal-header">
+    <h2>Settings</h2>
+  </div>
+  <div class="modal-body">
+
+    <button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
+      <span class="dot"></span>
+      <span id="fractionToggleText">Fractions: OFF</span>
+    </button>
+    <button id="improperToggle" class="fraction-toggle-btn sub" onclick="toggleImproper()" style="display:none;">
+      <span class="dot"></span>
+      <span id="improperToggleText">Improper Fractions: OFF</span>
+    </button>
+    <button id="commasToggle" class="fraction-toggle-btn on" onclick="toggleCommas()">
+      <span class="dot"></span>
+      <span id="commasToggleText">Commas: ON</span>
+    </button>
+    <button id="separatorToggle" class="fraction-toggle-btn sub" onclick="toggleSeparator()">
+      <span class="dot"></span>
+      <span id="separatorToggleText">European Style: OFF</span>
+    </button>
+
+  </div>
+</div>
 
   </div>
 </div>
@@ -1245,14 +1259,15 @@ display.addEventListener('touchmove', e => {
 
 function switchTab(tab) {
   const historyTab = document.getElementById("historyTab");
+  const settingsTab = document.getElementById("settingsTab");
   const infoTab = document.getElementById("infoTab");
   const historyContent = document.getElementById("historyContent");
+  const settingsContent = document.getElementById("settingsContent");
   const infoContent = document.getElementById("infoContent");
   const deleteContainer = document.getElementById("deleteContainer");
 
   isSelectMode = false;
-  const checkboxes = document.querySelectorAll(".entry-checkbox");
-  checkboxes.forEach(cb => {
+  document.querySelectorAll(".entry-checkbox").forEach(cb => {
     cb.checked = false;
     cb.style.display = "none";
   });
@@ -1260,16 +1275,22 @@ function switchTab(tab) {
   document.getElementById("selectToggle").classList.remove("active");
   deleteContainer.style.display = "none";
 
+  historyTab.classList.remove("active");
+  settingsTab.classList.remove("active");
+  infoTab.classList.remove("active");
+  historyContent.style.display = "none";
+  settingsContent.style.display = "none";
+  infoContent.style.display = "none";
+
   if (tab === "history") {
     historyTab.classList.add("active");
-    infoTab.classList.remove("active");
     historyContent.style.display = "flex";
-    infoContent.style.display = "none";
+  } else if (tab === "settings") {
+    settingsTab.classList.add("active");
+    settingsContent.style.display = "flex";
   } else {
     infoTab.classList.add("active");
-    historyTab.classList.remove("active");
     infoContent.style.display = "flex";
-    historyContent.style.display = "none";
   }
 }
 
