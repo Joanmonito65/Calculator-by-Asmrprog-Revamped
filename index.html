@@ -961,7 +961,7 @@ function showHistory() {
     checkbox.dataset.index = i;
     const textSpan = document.createElement("span");
     textSpan.className = "entry-text";
-    textSpan.textContent = `${addCommasToNumbers(entry.expr)} = ${entry.result} (${entry.date})`;
+textSpan.textContent = `${addCommasToNumbers(entry.expr)} = ${addCommasToNumbers(entry.result)} (${entry.date})`;
     const buttonsDiv = document.createElement("div");
     buttonsDiv.className = "entry-buttons";
     const copyBtn = document.createElement("button");
