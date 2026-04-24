@@ -485,9 +485,6 @@ border-radius: 50%; background: #888; flex-shrink: 0;
 </div>
 
 <div id="infoContent" style="display: none;">
-  <div class="modal-header">
-    <h2>Information</h2>
-  </div>
 
 <button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
   <span class="dot"></span>
@@ -503,6 +500,15 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   <span class="dot"></span>
   <span id="commasToggleText">Commas: ON</span>
 </button>
+
+<button id="separatorToggle" class="fraction-toggle-btn sub" onclick="toggleSeparator()">
+  <span class="dot"></span>
+  <span id="separatorToggleText">European Style: OFF</span>
+</button>
+
+  <div class="modal-header">
+    <h2>Information</h2>
+  </div>
 
   <div class="modal-body" id="infoText"> This advanced calculator application offers a comprehensive suite of features, catering to both basic arithmetic and more complex mathematical operations. It presents a clean, user-friendly interface with a prominent display at the top, ensuring that current calculations are always clearly visible. Below the display, a well-organized keypad provides access to numbers, standard operators, and specialized functions. The design emphasizes ease of use, making it accessible for a wide range of computational needs.
 
@@ -550,32 +556,37 @@ let useFractions = false;
 let isSelectMode = false;
 let useImproper = false;
 let useCommas = true;
+let useEuropeanSeparator = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
   });
 }
+
 function addCommasToNumbers(expr) {
- if (!useCommas) return expr;
+  if (!useCommas) return expr;
+  const locale = useEuropeanSeparator ? "de-DE" : "en-US";
   return expr.replace(/\d+(\.\d+)?/g, (match) => {
     if (match.includes(".")) {
       const parts = match.split(".");
       const intPart = parts[0];
       const decPart = parts[1];
       try {
-        return BigInt(intPart).toLocaleString("en-US") + "." + decPart;
+        return BigInt(intPart).toLocaleString(locale) + "." + decPart;
       } catch {
-        return parseInt(intPart, 10).toLocaleString("en-US") + "." + decPart;
+        return parseInt(intPart, 10).toLocaleString(locale) + "." + decPart;
       }
     } else {
       try {
-        return BigInt(match).toLocaleString("en-US");
+        return BigInt(match).toLocaleString(locale);
       } catch {
-        return parseInt(match, 10).toLocaleString("en-US");
+        return parseInt(match, 10).toLocaleString(locale);
       }
     }
   });
 }
+
+
 function simplifyExponential(expStr) {
   const parts = expStr.split(/e/i);
   if (parts.length !== 2) return expStr;
@@ -1315,6 +1326,20 @@ function toggleCommas() {
   useCommas = !useCommas;
   document.getElementById("commasToggle").classList.toggle("on", useCommas);
   document.getElementById("commasToggleText").textContent = useCommas ? "Commas: ON" : "Commas: OFF";
+  const separatorToggle = document.getElementById("separatorToggle");
+  separatorToggle.style.display = useCommas ? "flex" : "none";
+  if (!useCommas) {
+    useEuropeanSeparator = false;
+    separatorToggle.classList.remove("on");
+    document.getElementById("separatorToggleText").textContent = "European Style: OFF";
+  }
+  updateDisplay();
+}
+
+function toggleSeparator() {
+  useEuropeanSeparator = !useEuropeanSeparator;
+  document.getElementById("separatorToggle").classList.toggle("on", useEuropeanSeparator);
+  document.getElementById("separatorToggleText").textContent = useEuropeanSeparator ? "European Style: ON" : "European Style: OFF";
   updateDisplay();
 }
 
