@@ -651,7 +651,7 @@ function decimalToMixedFraction(num, maxDen = 1000) {
 function formatResult(num) {
   if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined";
   if (useFractions) return decimalToMixedFraction(num);
-  if (Math.abs(num) >= 1e7 || (Math.abs(num) > 0 && Math.abs(num) < 1e-7)) {
+  if (Math.abs(num) >= 1e11 || (Math.abs(num) > 0 && Math.abs(num) < 1e-11)) {
     return simplifyExponential(num.toExponential());
   }
   let str = num.toFixed(10).replace(/\.?0+$/, "");
@@ -774,7 +774,7 @@ try {
   const formatted = formatResult(result);
 screen.value = addCommasToNumbers(formatted);
   if (!["Overflow", "Too Low"].includes(formatted)) {
-    if (Math.abs(result) >= 1e7 || (Math.abs(result) > 0 && Math.abs(result) < 1e-7)) {
+    if (Math.abs(result) >= 1e11 || (Math.abs(result) > 0 && Math.abs(result) < 1e-11)) {
       expression = simplifyExponential(result.toExponential());
     } else {
 
