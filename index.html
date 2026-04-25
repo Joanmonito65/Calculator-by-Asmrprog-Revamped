@@ -419,6 +419,37 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   overflow: hidden;
 }
 
+.settings-input-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.settings-input-btn span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #232323;
+}
+.settings-input-btn input[type=number] {
+  width: 90px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  font-size: 14px;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  background: white;
+}
+
   </style>
 </head>
 <body>
@@ -540,6 +571,12 @@ This calculator includes flexible number formatting options that allow users to 
       <span id="separatorToggleText">European Style: OFF</span>
     </button>
 
+<div class="settings-input-btn">
+  <span>Scientific Min</span>
+  <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
+    onchange="updateSciThreshold(this.value)" />
+</div>
+
   </div>
 </div>
 
@@ -571,6 +608,7 @@ let isSelectMode = false;
 let useImproper = false;
 let useCommas = true;
 let useEuropeanSeparator = false;
+let sciThreshold = 1e11;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -651,7 +689,7 @@ function decimalToMixedFraction(num, maxDen = 1000) {
 function formatResult(num) {
   if (isNaN(num) || num === Infinity || num === -Infinity) return "Undefined";
   if (useFractions) return decimalToMixedFraction(num);
-  if (Math.abs(num) >= 1e11 || (Math.abs(num) > 0 && Math.abs(num) < 1e-11)) {
+if (Math.abs(num) >= sciThreshold || (Math.abs(num) > 0 && Math.abs(num) < 1 / sciThreshold)) {
     return simplifyExponential(num.toExponential());
   }
   let str = num.toFixed(10).replace(/\.?0+$/, "");
@@ -774,7 +812,7 @@ try {
   const formatted = formatResult(result);
 screen.value = addCommasToNumbers(formatted);
   if (!["Overflow", "Too Low"].includes(formatted)) {
-    if (Math.abs(result) >= 1e11 || (Math.abs(result) > 0 && Math.abs(result) < 1e-11)) {
+if (Math.abs(result) >= sciThreshold || (Math.abs(result) > 0 && Math.abs(result) < 1 / sciThreshold)) {
       expression = simplifyExponential(result.toExponential());
     } else {
 
@@ -1362,6 +1400,13 @@ function toggleSeparator() {
   document.getElementById("separatorToggle").classList.toggle("on", useEuropeanSeparator);
   document.getElementById("separatorToggleText").textContent = useEuropeanSeparator ? "European Style: ON" : "European Style: OFF";
   updateDisplay();
+}
+
+function updateSciThreshold(val) {
+  const n = parseInt(val, 10);
+  if (!isNaN(n) && n >= 1 && n <= 20) {
+    sciThreshold = Math.pow(10, n);
+  }
 }
 
 </script>
