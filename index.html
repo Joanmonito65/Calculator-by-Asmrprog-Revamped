@@ -571,6 +571,11 @@ This calculator includes flexible number formatting options that allow users to 
       <span id="separatorToggleText">European Style: OFF</span>
     </button>
 
+<button id="wrongAnswersToggle" class="fraction-toggle-btn" onclick="toggleWrongAnswers()">
+  <span class="dot"></span>
+  <span id="wrongAnswersToggleText">Wrong Answers Only: OFF</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Scientific Min</span>
   <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
@@ -609,6 +614,7 @@ let useImproper = false;
 let useCommas = true;
 let useEuropeanSeparator = false;
 let sciThreshold = 1e11;
+let useWrongAnswers = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -809,7 +815,11 @@ try {
     return;
   }
 
-  const formatted = formatResult(result);
+let displayResult = result;
+if (useWrongAnswers) {
+  displayResult = Math.floor(result - (100 + Math.random() * 200));
+}
+const formatted = formatResult(displayResult);
 screen.value = addCommasToNumbers(formatted);
   if (!["Overflow", "Too Low"].includes(formatted)) {
 if (Math.abs(result) >= sciThreshold || (Math.abs(result) > 0 && Math.abs(result) < 1 / sciThreshold)) {
@@ -1407,6 +1417,12 @@ function updateSciThreshold(val) {
   if (!isNaN(n) && n >= 1 && n <= 20) {
     sciThreshold = Math.pow(10, n);
   }
+}
+
+function toggleWrongAnswers() {
+  useWrongAnswers = !useWrongAnswers;
+  document.getElementById("wrongAnswersToggle").classList.toggle("on", useWrongAnswers);
+  document.getElementById("wrongAnswersToggleText").textContent = useWrongAnswers ? "Wrong Answers Only: ON" : "Wrong Answers Only: OFF";
 }
 
 </script>
