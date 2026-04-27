@@ -52,7 +52,6 @@
       white-space: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
-      margin-bottom: 10px;
       border: none;
       cursor: grab;
       user-select: text;
@@ -450,12 +449,36 @@ border-radius: 50%; background: #888; flex-shrink: 0;
   background: white;
 }
 
+.display-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+#wordForm {
+  position: absolute;
+  bottom: 10px;
+  left: 16px;
+  font-size: 11px;
+  color: #aaa;
+  pointer-events: none;
+  max-width: calc(100% - 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+  font-family: 'Dosis', sans-serif;
+  letter-spacing: 0.02em;
+}
+
   </style>
 </head>
 <body>
   <div class="wrapper">
     <button class="history-button" onclick="showHistory()">∨</button>
-    <input id="display" type="text" value="0" dir="ltr"/>
+<div class="display-wrapper">
+  <input id="display" type="text" value="0" dir="ltr"/>
+  <div id="wordForm"></div>
+</div>
 
 <section class="calc-buttons">
   <div class="calc-button-row">
@@ -576,6 +599,11 @@ This calculator includes flexible number formatting options that allow users to 
   <span id="wrongAnswersToggleText">Wrong Answers Only: OFF</span>
 </button>
 
+<button id="wordFormToggle" class="fraction-toggle-btn" onclick="toggleWordForm()">
+  <span class="dot"></span>
+  <span id="wordFormToggleText">Number Word Form: OFF</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Scientific Min</span>
   <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
@@ -615,6 +643,8 @@ let useCommas = true;
 let useEuropeanSeparator = false;
 let sciThreshold = 1e11;
 let useWrongAnswers = false;
+let useWordForm = false;
+let lastResult = null;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -815,12 +845,14 @@ try {
     return;
   }
 
+lastResult = result;
 let displayResult = result;
 if (useWrongAnswers) {
   displayResult = Math.floor(result - (100 + Math.random() * 200));
 }
 const formatted = formatResult(displayResult);
 screen.value = addCommasToNumbers(formatted);
+updateWordForm(result);
   if (!["Overflow", "Too Low"].includes(formatted)) {
 if (Math.abs(result) >= sciThreshold || (Math.abs(result) > 0 && Math.abs(result) < 1 / sciThreshold)) {
       expression = simplifyExponential(result.toExponential());
@@ -1222,6 +1254,7 @@ function updateDisplay() {
   const txt = expression || "0";
   screen.value = "";
   screen.value = addCommasToNumbers(txt);
+  updateWordForm(null);
   requestAnimationFrame(() => {
     if (!isDown) screen.scrollLeft = screen.scrollWidth;
   });
@@ -1423,6 +1456,56 @@ function toggleWrongAnswers() {
   useWrongAnswers = !useWrongAnswers;
   document.getElementById("wrongAnswersToggle").classList.toggle("on", useWrongAnswers);
   document.getElementById("wrongAnswersToggleText").textContent = useWrongAnswers ? "Wrong Answers Only: ON" : "Wrong Answers Only: OFF";
+}
+
+function numberToWords(num) {
+  if (!Number.isFinite(num) || Math.abs(num) >= 1e15) return "";
+  if (num === 0) return "zero";
+  const ones = ["zero","one","two","three","four","five","six","seven",
+    "eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen",
+    "sixteen","seventeen","eighteen","nineteen"];
+  const tens = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+  function chunk(n) {
+    if (n === 0) return "";
+    if (n < 20) return ones[n];
+    if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? "-"+ones[n%10] : "");
+    return ones[Math.floor(n/100)] + " hundred" + (n%100 ? " "+chunk(n%100) : "");
+  }
+  const scales = ["","thousand","million","billion","trillion"];
+  const negative = num < 0;
+  num = Math.abs(num);
+  const str = num.toFixed(10).replace(/\.?0+$/,"");
+  const [intStr, decStr = ""] = str.split(".");
+  const intNum = parseInt(intStr);
+  let intWords = "";
+  if (intNum === 0) {
+    intWords = "zero";
+  } else {
+    const parts = [];
+    let n = intNum, si = 0;
+    while (n > 0) {
+      const c = n % 1000;
+      if (c) parts.unshift(chunk(c) + (scales[si] ? " "+scales[si] : ""));
+      n = Math.floor(n/1000); si++;
+    }
+    intWords = parts.join(", ");
+  }
+  const decWords = decStr ? " point " + decStr.split("").map(d => ones[+d]).join(" ") : "";
+  return (negative ? "negative " : "") + intWords + decWords;
+}
+
+function updateWordForm(num) {
+  const el = document.getElementById("wordForm");
+  if (!el) return;
+  if (!useWordForm || num === null) { el.textContent = ""; return; }
+  el.textContent = numberToWords(num);
+}
+
+function toggleWordForm() {
+  useWordForm = !useWordForm;
+  document.getElementById("wordFormToggle").classList.toggle("on", useWordForm);
+  document.getElementById("wordFormToggleText").textContent = useWordForm ? "Number Word Form: ON" : "Number Word Form: OFF";
+  updateWordForm(lastResult);
 }
 
 </script>
