@@ -604,6 +604,11 @@ This calculator includes flexible number formatting options that allow users to 
   <span id="wordFormToggleText">Number Word Form: OFF</span>
 </button>
 
+<button id="pedmasToggle" class="fraction-toggle-btn on" onclick="togglePemdas()">
+  <span class="dot"></span>
+  <span id="pedmasToggleText">PEMDAS: ON</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Scientific Min</span>
   <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
@@ -645,6 +650,7 @@ let sciThreshold = 1e11;
 let useWrongAnswers = false;
 let useWordForm = false;
 let lastResult = null;
+let usePemdas = true;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -981,15 +987,21 @@ for (let i = 0; i < tokens.length; i++) {
     }
     return result;
   }
-  function parseExpression() {
-    let val = parseTerm();
-    while (peek() === "+" || peek() === "-") {
-      const op = consume();
-      const right = parseTerm();
-      val = op === "+" ? val + right : val - right;
-    }
-    return val;
+
+function parseExpression() {
+  let val = usePemdas ? parseTerm() : parseFactor();
+  const ops = usePemdas ? ["+", "-"] : ["+", "-", "*", "/"];
+  while (ops.includes(peek())) {
+    const op = consume();
+    const right = usePemdas ? parseTerm() : parseFactor();
+    if (op === "+") val = val + right;
+    else if (op === "-") val = val - right;
+    else if (op === "*") val = val * right;
+    else if (op === "/") val = val / right;
   }
+  return val;
+}
+
   function parseTerm() {
     let val = parseFactor();
     while (peek() === "*" || peek() === "/") {
@@ -1506,6 +1518,12 @@ function toggleWordForm() {
   document.getElementById("wordFormToggle").classList.toggle("on", useWordForm);
   document.getElementById("wordFormToggleText").textContent = useWordForm ? "Number Word Form: ON" : "Number Word Form: OFF";
   updateWordForm(lastResult);
+}
+
+function togglePemdas() {
+  usePemdas = !usePemdas;
+  document.getElementById("pedmasToggle").classList.toggle("on", usePemdas);
+  document.getElementById("pedmasToggleText").textContent = usePemdas ? "PEMDAS: ON" : "PEMDAS: OFF";
 }
 
 </script>
