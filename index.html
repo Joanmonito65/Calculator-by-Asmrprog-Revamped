@@ -1421,6 +1421,9 @@ function toggleImproper() {
   useImproper = !useImproper;
   document.getElementById("improperToggle").classList.toggle("on", useImproper);
   document.getElementById("improperToggleText").textContent = useImproper ? "Improper Fractions: ON" : "Improper Fractions: OFF";
+
+saveSettings();
+
 }
 
 function toggleFractions() {
@@ -1434,6 +1437,9 @@ function toggleFractions() {
     improperToggle.classList.remove("on");
     document.getElementById("improperToggleText").textContent = "Improper Fractions: OFF";
   }
+
+saveSettings();
+
 }
 
 function toggleCommas() {
@@ -1448,6 +1454,9 @@ function toggleCommas() {
     document.getElementById("separatorToggleText").textContent = "European Style: OFF";
   }
   updateDisplay();
+
+saveSettings();
+
 }
 
 function toggleSeparator() {
@@ -1455,6 +1464,9 @@ function toggleSeparator() {
   document.getElementById("separatorToggle").classList.toggle("on", useEuropeanSeparator);
   document.getElementById("separatorToggleText").textContent = useEuropeanSeparator ? "European Style: ON" : "European Style: OFF";
   updateDisplay();
+
+saveSettings();
+
 }
 
 function updateSciThreshold(val) {
@@ -1468,6 +1480,9 @@ function toggleWrongAnswers() {
   useWrongAnswers = !useWrongAnswers;
   document.getElementById("wrongAnswersToggle").classList.toggle("on", useWrongAnswers);
   document.getElementById("wrongAnswersToggleText").textContent = useWrongAnswers ? "Wrong Answers Only: ON" : "Wrong Answers Only: OFF";
+
+saveSettings();
+
 }
 
 function numberToWords(num) {
@@ -1518,13 +1533,59 @@ function toggleWordForm() {
   document.getElementById("wordFormToggle").classList.toggle("on", useWordForm);
   document.getElementById("wordFormToggleText").textContent = useWordForm ? "Number Word Form: ON" : "Number Word Form: OFF";
   updateWordForm(lastResult);
+
+saveSettings();
+
 }
 
 function togglePemdas() {
   usePemdas = !usePemdas;
   document.getElementById("pedmasToggle").classList.toggle("on", usePemdas);
   document.getElementById("pedmasToggleText").textContent = usePemdas ? "PEMDAS: ON" : "PEMDAS: OFF";
+
+saveSettings();
+
 }
+
+function saveSettings() {
+  localStorage.setItem("calcSettings", JSON.stringify({
+    useFractions, useImproper, useCommas, useEuropeanSeparator,
+    useWrongAnswers, useWordForm, usePemdas, sciThreshold
+  }));
+}
+
+function loadSettings() {
+  const saved = JSON.parse(localStorage.getItem("calcSettings") || "null");
+  if (!saved) return;
+
+  useFractions = saved.useFractions ?? false;
+  useImproper = saved.useImproper ?? false;
+  useCommas = saved.useCommas ?? true;
+  useEuropeanSeparator = saved.useEuropeanSeparator ?? false;
+  useWrongAnswers = saved.useWrongAnswers ?? false;
+  useWordForm = saved.useWordForm ?? false;
+  usePemdas = saved.usePemdas ?? true;
+  sciThreshold = saved.sciThreshold ?? 1e11;
+
+  document.getElementById("fractionToggle").classList.toggle("on", useFractions);
+  document.getElementById("fractionToggleText").textContent = useFractions ? "Fractions: ON" : "Fractions: OFF";
+  document.getElementById("improperToggle").style.display = useFractions ? "flex" : "none";
+  document.getElementById("improperToggle").classList.toggle("on", useImproper);
+  document.getElementById("improperToggleText").textContent = useImproper ? "Improper Fractions: ON" : "Improper Fractions: OFF";
+  document.getElementById("commasToggle").classList.toggle("on", useCommas);
+  document.getElementById("commasToggleText").textContent = useCommas ? "Commas: ON" : "Commas: OFF";
+  document.getElementById("separatorToggle").classList.toggle("on", useEuropeanSeparator);
+  document.getElementById("separatorToggleText").textContent = useEuropeanSeparator ? "European Style: ON" : "European Style: OFF";
+  document.getElementById("wrongAnswersToggle").classList.toggle("on", useWrongAnswers);
+  document.getElementById("wrongAnswersToggleText").textContent = useWrongAnswers ? "Wrong Answers Only: ON" : "Wrong Answers Only: OFF";
+  document.getElementById("wordFormToggle").classList.toggle("on", useWordForm);
+  document.getElementById("wordFormToggleText").textContent = useWordForm ? "Number Word Form: ON" : "Number Word Form: OFF";
+  document.getElementById("pedmasToggle").classList.toggle("on", usePemdas);
+  document.getElementById("pedmasToggleText").textContent = usePemdas ? "PEMDAS: ON" : "PEMDAS: OFF";
+  document.getElementById("sciThresholdInput").value = Math.log10(sciThreshold);
+}
+
+loadSettings();
 
 </script>
 
