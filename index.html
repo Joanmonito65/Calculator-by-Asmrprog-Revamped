@@ -566,7 +566,7 @@ The calculator boasts intuitive input handling, responding not only to button cl
 
 This enhanced calculator was originally conceived by the YouTube channel “AsmrProg” as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.  
 
-This calculator includes flexible number formatting options that allow users to switch between multiple display styles depending on their preference or the type of calculation being performed. All of these controls are conveniently located in the Settings tab, where users can quickly toggle features on or off. With fraction mode enabled, results are automatically converted from decimals into clean, simplified mixed fractions, and users can also turn on improper fraction mode to display results as a single numerator over denominator. If fractions are turned off, the calculator defaults to standard decimal output, ensuring precision and familiarity. Additionally, the comma toggle allows users to add or remove thousands separators, and a sub-option—similar to the improper fraction setting—lets users switch to a European-style number format for even greater customization.
+The Settings tab in this calculator provides a wide range of customization options that allow users to control how calculations are displayed and processed. It includes toggles for enabling fractions, with an additional option to show improper fractions when fraction mode is active. Users can also adjust number formatting by turning commas on or off and switching to a European-style separator for a different visual format. Additional features include options like “Wrong Answers Only” for fun experimentation, “Number Word Form” to display results in words, and a PEMDAS toggle to control the order of operations. Finally, the tab offers input fields for setting decimal precision and defining when scientific notation is used, giving users precise control over how results appear.
 
 </div>
     </div>
@@ -610,6 +610,12 @@ This calculator includes flexible number formatting options that allow users to 
 </button>
 
 <div class="settings-input-btn">
+  <span>Decimal Precision</span>
+  <input type="number" id="decimalPrecisionInput" value="15" min="0" max="15"
+    onchange="updateDecimalPrecision(this.value)" />
+</div>
+
+<div class="settings-input-btn">
   <span>Scientific Min</span>
   <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
     onchange="updateSciThreshold(this.value)" />
@@ -651,6 +657,7 @@ let useWrongAnswers = false;
 let useWordForm = false;
 let lastResult = null;
 let usePemdas = true;
+let decimalPrecision = 15;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -679,7 +686,6 @@ function addCommasToNumbers(expr) {
     }
   });
 }
-
 
 function simplifyExponential(expStr) {
   const parts = expStr.split(/e/i);
@@ -734,7 +740,7 @@ function formatResult(num) {
 if (Math.abs(num) >= sciThreshold || (Math.abs(num) > 0 && Math.abs(num) < 1 / sciThreshold)) {
     return simplifyExponential(num.toExponential());
   }
-  let str = num.toFixed(10).replace(/\.?0+$/, "");
+let str = num.toFixed(decimalPrecision).replace(/\.?0+$/, "");
 return str;
 }
 
@@ -1144,7 +1150,6 @@ screen.addEventListener('input', () => {
   updateDisplay();
 });
 
-
 screen.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' || e.key === '=') {
     e.preventDefault();
@@ -1550,7 +1555,7 @@ saveSettings();
 function saveSettings() {
   localStorage.setItem("calcSettings", JSON.stringify({
     useFractions, useImproper, useCommas, useEuropeanSeparator,
-    useWrongAnswers, useWordForm, usePemdas, sciThreshold
+    useWrongAnswers, useWordForm, usePemdas, sciThreshold, decimalPrecision
   }));
 }
 
@@ -1583,9 +1588,24 @@ function loadSettings() {
   document.getElementById("pedmasToggle").classList.toggle("on", usePemdas);
   document.getElementById("pedmasToggleText").textContent = usePemdas ? "PEMDAS: ON" : "PEMDAS: OFF";
   document.getElementById("sciThresholdInput").value = Math.log10(sciThreshold);
+
+decimalPrecision = saved.decimalPrecision ?? 15;
+document.getElementById("decimalPrecisionInput").value = decimalPrecision;
+
 }
 
 loadSettings();
+
+function updateDecimalPrecision(val) {
+  const n = parseInt(val, 10);
+  if (!isNaN(n) && n >= 0 && n <= 15) {
+    decimalPrecision = n;
+    saveSettings();
+  }
+
+loadSettings();
+
+}
 
 </script>
 
