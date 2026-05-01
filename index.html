@@ -10,76 +10,73 @@
   <style>
 
 :root {
-–bg1: #eb92be;
-–bg2: #ffef78;
-–bg3: #63c9b4;
-–card-color: #ffffff;
-–display-color: #ffffff;
-–btn-color: #ffffff;
-–accent-color: #d72880;
-–text-color: #232323;
+  --bg1: #eb92be;
+  --bg2: #ffef78;
+  --bg3: #63c9b4;
+  --card-color: #ffffff;
+  --display-color: #ffffff;
+  --btn-color: #ffffff;
+  --accent-color: #d72880;
+  --text-color: #232323;
 
-–toggle-bg-off: rgba(255,255,255,0.65);
-–toggle-dot-off: #888888;
-–toggle-bg-on: rgba(192,240,220,0.65);
-–toggle-dot-on: #18a34a;
+  --toggle-bg-off: rgba(255,255,255,0.65);
+  --toggle-dot-off: #888888;
+  --toggle-bg-on: rgba(192,240,220,0.65);
+  --toggle-dot-on: #18a34a;
 
-–confirm-bg: #ffffff;
-–confirm-yes: #D91414;
-–confirm-no: #0E77E8;
-–confirm-text: #232323;
+  --confirm-bg: #ffffff;
+  --confirm-yes: #D91414;
+  --confirm-no: #0E77E8;
+  --confirm-text: #232323;
 }
 
-```
-html, body {
-  box-sizing: border-box;
-  height: 100%;
-  margin: 0;
-  font-family: 'Dosis', sans-serif;
-}
-*, *::before, *::after { box-sizing: inherit; }
-body {
-  align-items: center;
-```
-
-background: linear-gradient(320deg, var(–bg1), var(–bg2), var(–bg3));
-display: flex;
-justify-content: center;
-}
-.wrapper {
-backdrop-filter: blur(5.5px);
--webkit-backdrop-filter: blur(5.5px);
-background: rgba(from var(–card-color) r g b / 0.30);
-border: 1px solid rgba(255, 255, 255, 0.01);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
-color: #232323;
-flex-basis: 400px;
-height: 630px;
-padding: 20px 35px;
-display: flex;
-flex-direction: column;
-position: relative;
-overflow: hidden;
-}
-#display {
-backdrop-filter: blur(5.5px);
--webkit-backdrop-filter: blur(5.5px);
-background: rgba(255, 255, 255, 0.75);
-border: 1px solid rgba(255, 255, 255, 0.01);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
-color: #232323;
-font-size: 35px;
-padding: 20px;
-text-align: right;
-width: 100%;
-white-space: nowrap;
-overflow-x: auto;
-overflow-y: hidden;
-border: none;
-cursor: grab;
-user-select: text;
+    html, body {
+      box-sizing: border-box;
+      height: 100%;
+      margin: 0;
+      font-family: 'Dosis', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: inherit; }
+    body {
+      align-items: center;
+background: linear-gradient(320deg, var(--bg1), var(--bg2), var(--bg3));
+      display: flex;
+      justify-content: center;
+    }
+    .wrapper {
+      backdrop-filter: blur(5.5px);
+      -webkit-backdrop-filter: blur(5.5px);
+background: rgba(from var(--card-color) r g b / 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.01);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+      color: #232323;
+      flex-basis: 400px;
+      height: 630px;
+      padding: 20px 35px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    #display {
+      backdrop-filter: blur(5.5px);
+      -webkit-backdrop-filter: blur(5.5px);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.01);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+      color: #232323;
+      font-size: 35px;
+      padding: 20px;
+      text-align: right;
+      width: 100%;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border: none;
+      cursor: grab;
+      user-select: text;
 
 }
 
@@ -93,45 +90,45 @@ cursor: grabbing;
 #display::-webkit-search-cancel-button,
 #display::-webkit-search-results-button,
 #display::-webkit-search-results-decoration {
-display: none;
+  display: none;
 }
 
 .history-button {
-position: absolute;
-top: 10px;
-left: 10px;
-background: rgba(255, 255, 255, 0.6);
-backdrop-filter: blur(10px);
-border-radius: 50%;
-border: none;
-width: 40px;
-height: 40px;
-font-size: 24px;
-color: black;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 .entry-button.copied {
-background: none;
-border: none;
-color: green;
-font-weight: bold;
-pointer-events: none;
+ background: none;
+ border: none;
+ color: green;
+ font-weight: bold;
+ pointer-events: none;
 }
 .modal {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-background-color: rgba(0, 0, 0, 0.4);
-backdrop-filter: blur(5px);
-display: none;
-align-items: center;
-justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
@@ -148,159 +145,159 @@ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .modal-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 .modal h2 {
-margin: 0;
-font-size: 20px;
+  margin: 0;
+  font-size: 20px;
 }
 .select-button {
-background: none;
-border: none;
-color: gray;
-border-radius: 4px;
-padding: 4px 8px;
-font-size: 14px;
-cursor: pointer;
+  background: none;
+  border: none;
+  color: gray;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 .select-button.active {
-color: darkgray;
+  color: darkgray;
 }
 
 .modal-entry {
-display: flex;
-align-items: center;
-justify-content: space-between;
-font-size: 16px;
-margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: 6px 0;
 }
 .entry-text {
-flex: 1;
-margin-right: 8px;
-word-break: break-all;
+  flex: 1;
+  margin-right: 8px;
+  word-break: break-all;
 }
 .entry-buttons {
-display: flex;
-gap: 4px;
-flex-shrink: 0;
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
 }
 .entry-button {
-background: none;
-border: none;
-color: gray;
-padding: 2px 6px;
-font-size: 14px;
-cursor: pointer;
+  background: none;
+  border: none;
+  color: gray;
+  padding: 2px 6px;
+  font-size: 14px;
+  cursor: pointer;
 }
 .entry-checkbox {
-margin-right: 8px;
-flex-shrink: 0;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .delete-button {
-background: none;
-border: none;
-color: gray;
-border-radius: 4px;
-padding: 6px 12px;
-font-size: 14px;
-cursor: pointer;
+  background: none;
+  border: none;
+  color: gray;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
 }
 .select-all-button {
-background: none;
-border: none;
-color: gray;
-border-radius: 4px;
-padding: 6px 12px;
-font-size: 14px;
-cursor: pointer;
+  background: none;
+  border: none;
+  color: gray;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
 }
 .calc-buttons {
-flex-grow: 1;
+  flex-grow: 1;
 }
 .calc-button-row {
-display: flex;
-justify-content: space-between;
-margin: 5% 0;
-gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 5% 0;
+  gap: 10px;
 }
 .calc-button {
-backdrop-filter: blur(5.5px);
--webkit-backdrop-filter: blur(5.5px);
-background: rgba(255, 255, 255, 0.75);
-border: 1px solid rgba(255, 255, 255, 0.01);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
-color: #232323;
-font-family: inherit;
-font-size: 24px;
-height: 65px;
-transition: background-color 0.2s;
-user-select: none;
-flex: 1;
+  backdrop-filter: blur(5.5px);
+  -webkit-backdrop-filter: blur(5.5px);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.01);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  color: #232323;
+  font-family: inherit;
+  font-size: 24px;
+  height: 65px;
+  transition: background-color 0.2s;
+  user-select: none;
+  flex: 1;
 }
 .calc-button:active { background-color: #ffef78; }
 .calc-button.purple {
-background: #d72880;
-color: #fff;
+  background: #d72880;
+  color: #fff;
 }
 .calc-button.purple:hover { filter: brightness(110%); }
 .calc-button-row:last-child .calc-button { flex: 1; }
 
 .confirm-delete-popup {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-backdrop-filter: blur(3px);
-background: rgba(0, 0, 0, 0.4);
-display: none;
-align-items: center;
-justify-content: center;
-z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 .confirm-box {
-background: var(–confirm-bg);
-padding: 20px;
-border-radius: 12px;
-width: 90%;
-max-width: 400px;
-box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-text-align: center;
+  background: var(--confirm-bg);
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
 }
 .confirm-box p {
-margin-bottom: 20px;
-font-size: 20px;
-color: var(–confirm-text);
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: var(--confirm-text);
 }
 .confirm-buttons {
-display: flex;
-justify-content: space-between;
-gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 #confirmDeleteBtn {
-background-color: transparent;
-color: var(–confirm-yes);
-border: none;
-padding: 10px 16px;
-border-radius: 6px;
-cursor: pointer;
-flex: 1;
-font-size: 1.25em;
+  background-color: transparent;
+  color: var(--confirm-yes);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 1.25em;
 }
 #cancelDeleteBtn {
-background-color: transparent;
-color: var(–confirm-no);
-border: none;
-padding: 10px 16px;
-border-radius: 6px;
-cursor: pointer;
-flex: 1;
-font-size: 1.25em;
+  background-color: transparent;
+  color: var(--confirm-no);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 1.25em;
 }
 
 #historyModal .modal-content {
@@ -411,7 +408,7 @@ font-weight: 700;
 display: flex;
 align-items: center;
 justify-content: space-between;
-background: var(–toggle-bg-off);
+background: var(--toggle-bg-off);
 backdrop-filter: blur(10px);
 box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 transition: transform 0.2s, background 0.2s;
@@ -420,145 +417,145 @@ transition: transform 0.2s, background 0.2s;
 .fraction-toggle-btn .dot {
 width: 10px; height: 10px;
 border-radius: 50%;
-background: var(–toggle-dot-off);
+background: var(--toggle-dot-off);
 flex-shrink: 0;
 }
-.fraction-toggle-btn.on { background: var(–toggle-bg-on); }
-.fraction-toggle-btn.on .dot { background: var(–toggle-dot-on); }
+.fraction-toggle-btn.on { background: var(--toggle-bg-on); }
+.fraction-toggle-btn.on .dot { background: var(--toggle-dot-on); }
 
 .fraction-toggle-btn.sub {
-font-size: 13px;
-padding: 8px 12px;
-margin: -6px 0 12px 16px;
-width: calc(100% - 16px);
-font-weight: 600;
-opacity: 0.85;
+  font-size: 13px;
+  padding: 8px 12px;
+  margin: -6px 0 12px 16px;
+  width: calc(100% - 16px);
+  font-weight: 600;
+  opacity: 0.85;
 }
 .fraction-toggle-btn.sub .dot {
-width: 8px;
-height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 #settingsContent {
-flex: 1;
-display: flex;
-flex-direction: column;
-overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .settings-input-btn {
-width: 100%;
-padding: 12px 14px;
-border-radius: 14px;
-border: none;
-margin: 0 0 12px 0;
-font-weight: 700;
-display: flex;
-align-items: center;
-justify-content: space-between;
-background: rgba(255,255,255,0.65);
-backdrop-filter: blur(10px);
-box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 .settings-input-btn span {
-font-size: 14px;
-font-weight: 700;
-color: #232323;
+  font-size: 14px;
+  font-weight: 700;
+  color: #232323;
 }
 .settings-input-btn input[type=number] {
-width: 90px;
-padding: 4px 8px;
-border-radius: 8px;
-border: 1.5px solid #ddd;
-font-size: 14px;
-font-family: inherit;
-text-align: center;
-outline: none;
-background: white;
+  width: 90px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  font-size: 14px;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  background: white;
 }
 
 .display-wrapper {
-position: relative;
-margin-bottom: 10px;
+  position: relative;
+  margin-bottom: 10px;
 }
 
 #wordForm {
-position: absolute;
-bottom: 10px;
-left: 16px;
-font-size: 11px;
-color: #aaa;
-pointer-events: none;
-max-width: calc(100% - 32px);
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-z-index: 2;
-font-family: ‘Dosis’, sans-serif;
-letter-spacing: 0.02em;
+  position: absolute;
+  bottom: 10px;
+  left: 16px;
+  font-size: 11px;
+  color: #aaa;
+  pointer-events: none;
+  max-width: calc(100% - 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+  font-family: 'Dosis', sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .settings-color-btn {
-width: 100%;
-padding: 12px 14px;
-border-radius: 14px;
-margin: 0 0 12px 0;
-display: flex;
-align-items: center;
-justify-content: space-between;
-background: rgba(255,255,255,0.65);
-backdrop-filter: blur(10px);
-box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 .settings-color-btn span {
-font-size: 14px;
-font-weight: 700;
-color: #232323;
+  font-size: 14px;
+  font-weight: 700;
+  color: #232323;
 }
 
 .settings-color-btn input[type=color] {
-width: 44px;
-height: 30px;
-border-radius: 8px;
-border: 1.5px solid #ddd;
-cursor: pointer;
-padding: 2px 3px;
-background: white;
+  width: 44px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  cursor: pointer;
+  padding: 2px 3px;
+  background: white;
 }
 
 .settings-reset-btn {
-width: 100%;
-padding: 12px 14px;
-border-radius: 14px;
-border: none;
-margin: 0 0 12px 0;
-cursor: pointer;
-font-weight: 700;
-font-family: inherit;
-font-size: 14px;
-background: rgba(255,255,255,0.72);
-backdrop-filter: blur(10px);
-box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-color: #232323;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  margin: 0 0 12px 0;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  color: #232323;
 }
 
 .settings-reset-btn:hover {
-transform: scale(1.01);
+  transform: scale(1.01);
 }
 
 .settings-reset-btn.danger {
-color: #b00020;
+  color: #b00020;
 }
 
 /* Section divider label */
 .settings-section-label {
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-color: #999;
-padding: 4px 4px 8px 4px;
-margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  padding: 4px 4px 8px 4px;
+  margin: 0;
 }
 
   </style>
@@ -645,19 +642,19 @@ margin: 0;
 
   <div class="modal-body" id="infoText"> This advanced calculator application offers a comprehensive suite of features, catering to both basic arithmetic and more complex mathematical operations. It presents a clean, user-friendly interface with a prominent display at the top, ensuring that current calculations are always clearly visible. Below the display, a well-organized keypad provides access to numbers, standard operators, and specialized functions. The design emphasizes ease of use, making it accessible for a wide range of computational needs.
 
-One of the standout features of this calculator is its robust history functionality. By clicking the “∨” button at the top left, users can access a modal window displaying a detailed log of past calculations. This history is not merely a record; it’s interactive. Each entry shows the full expression and its result, along with the date it was computed. Users have the convenience of copying individual entries to their clipboard or instantly recalling an expression to the main display for further modification or re-evaluation.
+One of the standout features of this calculator is its robust history functionality. By clicking the "∨" button at the top left, users can access a modal window displaying a detailed log of past calculations. This history is not merely a record; it's interactive. Each entry shows the full expression and its result, along with the date it was computed. Users have the convenience of copying individual entries to their clipboard or instantly recalling an expression to the main display for further modification or re-evaluation.
 
-The history feature also includes powerful management tools. Within the history modal, a “Select” button allows users to enter a selection mode, enabling them to choose multiple entries for deletion. This is particularly useful for managing a long list of calculations, allowing for quick cleanup of irrelevant data. A “Select All” option further streamlines this process, while a confirmation pop-up ensures that accidental deletions are prevented, prompting the user to confirm their intent before any data is permanently removed. This meticulous attention to user control enhances the overall experience.
+The history feature also includes powerful management tools. Within the history modal, a "Select" button allows users to enter a selection mode, enabling them to choose multiple entries for deletion. This is particularly useful for managing a long list of calculations, allowing for quick cleanup of irrelevant data. A "Select All" option further streamlines this process, while a confirmation pop-up ensures that accidental deletions are prevented, prompting the user to confirm their intent before any data is permanently removed. This meticulous attention to user control enhances the overall experience.
 
 Beyond standard operations, this calculator incorporates several advanced mathematical functions, including exponents (^), square roots (√), and factorials (!). These functions are readily available on the keypad, allowing for more sophisticated calculations. The calculator also supports the use of the mathematical constant pi (π), providing precise values for calculations involving circles or other related formulas. The display intelligently handles large numbers, using scientific notation when appropriate and automatically adding commas for readability, which significantly improves the comprehension of complex results.
 
-A unique aspect of this calculator is its support for special input characters, enhancing its versatility beyond a standard physical calculator. The &√ character combination allows for calculating any root of a number, meaning you can find cube roots, fourth roots, and so on, not just square roots. The backslash \ acts as a division symbol, automatically converting to a forward slash / for clear fraction representation. Furthermore, the semicolon ; can be used after a fraction (e.g., 1/4;100) to quickly calculate a fraction of a given number, providing an immediate percentage-like result without extra steps. The | (divisible) character is also available, displaying “True (by x)” or “False (by x)” as the answer. Lastly, the %:  combination is specifically designed to calculate a certain percentage of a number, offering a direct and intuitive way to handle percentage-based calculations.
+A unique aspect of this calculator is its support for special input characters, enhancing its versatility beyond a standard physical calculator. The &√ character combination allows for calculating any root of a number, meaning you can find cube roots, fourth roots, and so on, not just square roots. The backslash \ acts as a division symbol, automatically converting to a forward slash / for clear fraction representation. Furthermore, the semicolon ; can be used after a fraction (e.g., 1/4;100) to quickly calculate a fraction of a given number, providing an immediate percentage-like result without extra steps. The | (divisible) character is also available, displaying "True (by x)" or "False (by x)" as the answer. Lastly, the %:  combination is specifically designed to calculate a certain percentage of a number, offering a direct and intuitive way to handle percentage-based calculations.
 
-The calculator boasts intuitive input handling, responding not only to button clicks but also to keyboard input. Users can type numbers and operators directly, and common keys like “Enter” or “=” will trigger the calculation, while “Backspace” acts as a clear last character function. This dual input method provides flexibility, allowing users to choose their preferred interaction style. The display itself is interactive, allowing users to scroll horizontally to view long expressions, ensuring that even complex equations fit within the visible area.
+The calculator boasts intuitive input handling, responding not only to button clicks but also to keyboard input. Users can type numbers and operators directly, and common keys like "Enter" or "=" will trigger the calculation, while "Backspace" acts as a clear last character function. This dual input method provides flexibility, allowing users to choose their preferred interaction style. The display itself is interactive, allowing users to scroll horizontally to view long expressions, ensuring that even complex equations fit within the visible area.
 
-This enhanced calculator was originally conceived by the YouTube channel “AsmrProg” as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.
+This enhanced calculator was originally conceived by the YouTube channel "AsmrProg" as a simpler, more fundamental tool. However, it has since been significantly revamped and improved to offer the sophisticated features and user experience described above. The journey from a basic calculator to this advanced version reflects a commitment to expanding functionality, improving usability, and incorporating a wider range of mathematical capabilities, making it a powerful and versatile tool for anyone needing to perform calculations.  
 
-The Settings tab in this calculator provides a wide range of customization options that allow users to control how calculations are displayed and processed. It includes toggles for enabling fractions, with an additional option to show improper fractions when fraction mode is active. Users can also adjust number formatting by turning commas on or off and switching to a European-style separator for a different visual format. Additional features include options like “Wrong Answers Only” for fun experimentation, “Number Word Form” to display results in words, and a PEMDAS toggle to control the order of operations. Finally, the tab offers input fields for setting decimal precision and defining when scientific notation is used, giving users precise control over how results appear.
+The Settings tab in this calculator provides a wide range of customization options that allow users to control how calculations are displayed and processed. It includes toggles for enabling fractions, with an additional option to show improper fractions when fraction mode is active. Users can also adjust number formatting by turning commas on or off and switching to a European-style separator for a different visual format. Additional features include options like "Wrong Answers Only" for fun experimentation, "Number Word Form" to display results in words, and a PEMDAS toggle to control the order of operations. Finally, the tab offers input fields for setting decimal precision and defining when scientific notation is used, giving users precise control over how results appear.
 
 </div>
     </div>
@@ -668,24 +665,22 @@ The Settings tab in this calculator provides a wide range of customization optio
   </div>
   <div class="modal-body">
 
-```
-<button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
-  <span class="dot"></span>
-  <span id="fractionToggleText">Fractions: OFF</span>
-</button>
-<button id="improperToggle" class="fraction-toggle-btn sub" onclick="toggleImproper()" style="display:none;">
-  <span class="dot"></span>
-  <span id="improperToggleText">Improper Fractions: OFF</span>
-</button>
-<button id="commasToggle" class="fraction-toggle-btn on" onclick="toggleCommas()">
-  <span class="dot"></span>
-  <span id="commasToggleText">Commas: ON</span>
-</button>
-<button id="separatorToggle" class="fraction-toggle-btn sub" onclick="toggleSeparator()">
-  <span class="dot"></span>
-  <span id="separatorToggleText">European Style: OFF</span>
-</button>
-```
+    <button id="fractionToggle" class="fraction-toggle-btn" onclick="toggleFractions()">
+      <span class="dot"></span>
+      <span id="fractionToggleText">Fractions: OFF</span>
+    </button>
+    <button id="improperToggle" class="fraction-toggle-btn sub" onclick="toggleImproper()" style="display:none;">
+      <span class="dot"></span>
+      <span id="improperToggleText">Improper Fractions: OFF</span>
+    </button>
+    <button id="commasToggle" class="fraction-toggle-btn on" onclick="toggleCommas()">
+      <span class="dot"></span>
+      <span id="commasToggleText">Commas: ON</span>
+    </button>
+    <button id="separatorToggle" class="fraction-toggle-btn sub" onclick="toggleSeparator()">
+      <span class="dot"></span>
+      <span id="separatorToggleText">European Style: OFF</span>
+    </button>
 
 <button id="wrongAnswersToggle" class="fraction-toggle-btn" onclick="toggleWrongAnswers()">
   <span class="dot"></span>
@@ -721,7 +716,6 @@ The Settings tab in this calculator provides a wide range of customization optio
 </div>
 
 <!-- Background Colors -->
-
 <p class="settings-section-label">Background Colors</p>
 <div class="settings-color-btn">
   <span>Background Color 1</span>
@@ -737,7 +731,6 @@ The Settings tab in this calculator provides a wide range of customization optio
 </div>
 
 <!-- Calculator Colors -->
-
 <p class="settings-section-label">Calculator Colors</p>
 <div class="settings-color-btn">
   <span>Calculator Card</span>
@@ -761,7 +754,6 @@ The Settings tab in this calculator provides a wide range of customization optio
 </div>
 
 <!-- Toggle Colors -->
-
 <p class="settings-section-label">Toggle Colors</p>
 <div class="settings-color-btn">
   <span>Toggle ON Background</span>
@@ -781,7 +773,6 @@ The Settings tab in this calculator provides a wide range of customization optio
 </div>
 
 <!-- Delete Popup Colors -->
-
 <p class="settings-section-label">Delete Popup Colors</p>
 <div class="settings-color-btn">
   <span>Popup Background</span>
@@ -801,7 +792,6 @@ The Settings tab in this calculator provides a wide range of customization optio
 </div>
 
 <!-- Menu Colors -->
-
 <p class="settings-section-label">Menu Colors</p>
 <div class="settings-color-btn">
   <span>History Text</span>
