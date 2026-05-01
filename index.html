@@ -609,6 +609,11 @@ The Settings tab in this calculator provides a wide range of customization optio
   <span id="pedmasToggleText">PEMDAS: ON</span>
 </button>
 
+<button id="autoCloseParenToggle" class="fraction-toggle-btn on" onclick="toggleAutoCloseParen()">
+  <span class="dot"></span>
+  <span id="autoCloseParenToggleText">Auto-Close Parentheses: ON</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Decimal Precision</span>
   <input type="number" id="decimalPrecisionInput" value="15" min="0" max="15"
@@ -650,14 +655,14 @@ const fractionToggleText = document.getElementById("fractionToggleText");
 let useFractions = false;
 let isSelectMode = false;
 let useImproper = false;
-let useCommas = true;
-let useEuropeanSeparator = false;
+let useCommas = true;let useEuropeanSeparator = false;
 let sciThreshold = 1e11;
 let useWrongAnswers = false;
 let useWordForm = false;
 let lastResult = null;
 let usePemdas = true;
 let decimalPrecision = 15;
+let autoCloseParen = true;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -849,7 +854,24 @@ if (expression.includes("|")) {
 
 try {
   const original = expression;
-  const result = parseAndEvaluate(expression);
+let evalExpr = expression;
+
+if (autoCloseParen) {
+  let depth = 0;
+  let cleaned = "";
+  for (const ch of evalExpr) {
+    if (ch === "(") { depth++; cleaned += ch; }
+    else if (ch === ")") {
+      if (depth > 0) { depth--; cleaned += ch; }
+    } else {
+      cleaned += ch;
+    }
+  }
+  cleaned += ")".repeat(depth);
+  evalExpr = cleaned;
+}
+
+const result = parseAndEvaluate(evalExpr);
 
   if (isNaN(result)) {
     screen.value = "Undefined";
@@ -1555,7 +1577,7 @@ saveSettings();
 function saveSettings() {
   localStorage.setItem("calcSettings", JSON.stringify({
     useFractions, useImproper, useCommas, useEuropeanSeparator,
-    useWrongAnswers, useWordForm, usePemdas, sciThreshold, decimalPrecision
+    useWrongAnswers, useWordForm, usePemdas, sciThreshold, decimalPrecision, autoCloseParen
   }));
 }
 
@@ -1592,6 +1614,10 @@ function loadSettings() {
 decimalPrecision = saved.decimalPrecision ?? 15;
 document.getElementById("decimalPrecisionInput").value = decimalPrecision;
 
+autoCloseParen = saved.autoCloseParen ?? true;
+document.getElementById("autoCloseParenToggle").classList.toggle("on", autoCloseParen);
+document.getElementById("autoCloseParenToggleText").textContent = autoCloseParen ? "Auto-Close Parentheses: ON" : "Auto-Close Parentheses: OFF";
+
 }
 
 loadSettings();
@@ -1605,6 +1631,13 @@ function updateDecimalPrecision(val) {
 
 loadSettings();
 
+}
+
+function toggleAutoCloseParen() {
+  autoCloseParen = !autoCloseParen;
+  document.getElementById("autoCloseParenToggle").classList.toggle("on", autoCloseParen);
+  document.getElementById("autoCloseParenToggleText").textContent = autoCloseParen ? "Auto-Close Parentheses: ON" : "Auto-Close Parentheses: OFF";
+  saveSettings();
 }
 
 </script>
