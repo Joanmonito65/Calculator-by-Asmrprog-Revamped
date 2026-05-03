@@ -802,6 +802,11 @@ The Settings tab in this calculator provides a wide range of customization optio
   <span id="notesToggleText">Notes: OFF</span>
 </button>
 
+<button id="factorialToggle" class="fraction-toggle-btn" onclick="toggleFactorialMode()">
+  <span class="dot"></span>
+  <span id="factorialToggleText">Iterated Factorials: OFF</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Decimal Precision</span>
   <input type="number" id="decimalPrecisionInput" value="15" min="0" max="15"
@@ -1001,6 +1006,7 @@ let usePemdas = true;
 let decimalPrecision = 15;
 let autoCloseParen = true;
 let useNotes = false;
+let useIteratedFactorial = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -1268,21 +1274,24 @@ if (value === "&√") {
   return;
 }
 
-  if (value === "!") {
-    if (/[0-9)]$/.test(expression)) expression += "!";
-    updateDisplay();
-    return;
-  }
+if (value === "!") {
+  expression += "!";
+  updateDisplay();
+  return;
+}
+
   expression += value;
   updateDisplay();
 }
-function factorial(n) {
+
+function multifactorial(n, k) {
   if (n < 0 || n % 1 !== 0) throw "";
   if (n === 0) return 1;
-  let f = 1;
-  for (let i = 2; i <= n; i++) f *= i;
-  return f;
+  let result = 1;
+  for (let i = n; i > 0; i -= k) result *= i;
+  return result;
 }
+
 function parseAndEvaluate(expr) {
 
 expr = expr.replace(
@@ -1378,14 +1387,28 @@ if (op === "/" && right === 0) val = val / right;
     }
     return val;
   }
-  function parseFactor() {
-    let val = parsePower();
-    while (peek() === "!") {
-      consume();
-      val = factorial(val);
+
+function parseFactor() {
+  let val = parsePower();
+while (peek() === "!") {
+  let count = 0;
+  while (peek() === "!") { consume(); count++; }
+
+  if (useIteratedFactorial) {
+    // 3!! = (3!)!
+    let temp = val;
+    for (let i = 0; i < count; i++) {
+      temp = factorial(temp);
     }
-    return val;
+    val = temp;
+  } else {
+    // standard multi-factorial (n!! = n*(n-2)*...)
+    val = multifactorial(val, count);
   }
+}
+  return val;
+}
+
   function parsePower() {
     let val = parseUnary();
     while (peek() === "^") {
@@ -1930,6 +1953,7 @@ function saveSettings() {
     decimalPrecision,
     autoCloseParen,
     useNotes,
+    useIteratedFactorial,
     colorBg1: document.getElementById("colorBg1").value,
     colorBg2: document.getElementById("colorBg2").value,
     colorBg3: document.getElementById("colorBg3").value,
@@ -2044,6 +2068,9 @@ if (saved.colorNotesInputBg) document.getElementById("colorNotesInputBg").value 
 if (saved.colorNotesText) document.getElementById("colorNotesText").value = saved.colorNotesText;
 
 applyNotesColors();
+
+document.getElementById("factorialToggle").classList.toggle("on", useIteratedFactorial);
+document.getElementById("factorialToggleText").textContent = useIteratedFactorial ? "Iterated Factorials: ON" : "Iterated Factorials: OFF";
 
 }
 
@@ -2310,6 +2337,10 @@ document.getElementById("notesToggleText").textContent = "Notes: OFF";
 document.getElementById("notesBtn").style.display = "none";
 document.getElementById("notesPanel").style.display = "none";
 
+useIteratedFactorial = false;
+document.getElementById("factorialToggle").classList.remove("on");
+document.getElementById("factorialToggleText").textContent = "Iterated Factorials: OFF";
+
   resetColorSettings();
   saveSettings();
 }
@@ -2348,6 +2379,20 @@ function applyNotesColors() {
   document.documentElement.style.setProperty('--notes-text', text);
 
   saveSettings();
+}
+
+function toggleFactorialMode() {
+  useIteratedFactorial = !useIteratedFactorial;
+  document.getElementById("factorialToggle").classList.toggle("on", useIteratedFactorial);
+  document.getElementById("factorialToggleText").textContent = useIteratedFactorial ? "Iterated Factorials: ON" : "Iterated Factorials: OFF";
+  saveSettings();
+}
+
+function factorial(n) {
+  if (n < 0 || n % 1 !== 0) throw "";
+  let r = 1;
+  for (let i = 2; i <= n; i++) r *= i;
+  return r;
 }
 
 </script>
