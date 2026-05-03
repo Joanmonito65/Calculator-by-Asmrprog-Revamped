@@ -18,6 +18,7 @@
   --btn-color: #ffffff;
   --accent-color: #d72880;
   --text-color: #232323;
+  --word-form-color: #aaaaaa;
 
   --toggle-bg-off: rgba(255,255,255,0.65);
   --toggle-dot-off: #888888;
@@ -492,7 +493,7 @@ flex-shrink: 0;
   bottom: 10px;
   left: 16px;
   font-size: 11px;
-  color: #aaa;
+  color: var(--word-form-color);
   pointer-events: none;
   max-width: calc(100% - 32px);
   white-space: nowrap;
@@ -856,6 +857,11 @@ The Settings tab in this calculator provides a wide range of customization optio
 <div class="settings-color-btn">
   <span>Text Color</span>
   <input type="color" id="colorText" value="#232323" oninput="applyColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Number Word Form</span>
+  <input type="color" id="colorWordForm" value="#aaaaaa" oninput="applyWordFormColor()">
 </div>
 
 <!-- Toggle Colors -->
@@ -1228,9 +1234,10 @@ let displayResult = result;
 if (useWrongAnswers) {
   displayResult = Math.floor(result - (100 + Math.random() * 200));
 }
+
 const formatted = formatResult(displayResult);
 screen.value = addCommasToNumbers(formatted);
-updateWordForm(result);
+updateWordForm(displayResult);
   if (!["Overflow", "Too Low"].includes(formatted)) {
 if (Math.abs(result) >= sciThreshold || (Math.abs(result) > 0 && Math.abs(result) < 1 / sciThreshold)) {
       expression = simplifyExponential(result.toExponential());
@@ -1984,7 +1991,11 @@ function saveSettings() {
     colorNotesPlaceholder: document.getElementById("colorNotesPlaceholder").value,
     colorNotesInputBg: document.getElementById("colorNotesInputBg").value,
     colorNotesText: document.getElementById("colorNotesText").value,
+
+colorWordForm: document.getElementById("colorWordForm").value,
+
   }));
+
 }
 
 function loadSettings() {
@@ -2071,6 +2082,9 @@ applyNotesColors();
 
 document.getElementById("factorialToggle").classList.toggle("on", useIteratedFactorial);
 document.getElementById("factorialToggleText").textContent = useIteratedFactorial ? "Iterated Factorials: ON" : "Iterated Factorials: OFF";
+
+if (saved.colorWordForm) document.getElementById("colorWordForm").value = saved.colorWordForm;
+applyWordFormColor();
 
 }
 
@@ -2245,6 +2259,7 @@ const DEFAULT_SETTINGS = {
   colorNotesPlaceholder: "#aaaaaa",
   colorNotesInputBg: "#ffffff",
   colorNotesText: "#232323",
+  colorWordForm: "#aaaaaa",
 };
 
 function resetColorSettings() {
@@ -2281,6 +2296,8 @@ function resetColorSettings() {
   document.getElementById("colorNotesPlaceholder").value = "#aaaaaa";
   document.getElementById("colorNotesInputBg").value = "#ffffff";
   document.getElementById("colorNotesText").value = "#232323";
+
+document.getElementById("colorWordForm").value = DEFAULT_SETTINGS.colorWordForm;
 
   applyColors();
   applyNotesColors();
@@ -2393,6 +2410,12 @@ function factorial(n) {
   let r = 1;
   for (let i = 2; i <= n; i++) r *= i;
   return r;
+}
+
+function applyWordFormColor() {
+  const color = document.getElementById("colorWordForm").value;
+  document.documentElement.style.setProperty('--word-form-color', color);
+  saveSettings();
 }
 
 </script>
