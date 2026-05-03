@@ -555,7 +555,6 @@ flex-shrink: 0;
   color: #b00020;
 }
 
-/* Section divider label */
 .settings-section-label {
   font-size: 11px;
   font-weight: 700;
@@ -2061,7 +2060,6 @@ loadSettings();
 
 }
 
-// Load saved notes
 document.getElementById("notesTextarea").value = localStorage.getItem("calcNotes") || "";
 document.getElementById("notesTextarea").addEventListener("input", () => {
   localStorage.setItem("calcNotes", document.getElementById("notesTextarea").value);
@@ -2328,7 +2326,6 @@ function toggleNotes() {
   document.getElementById("notesToggleText").textContent = useNotes ? "Notes: ON" : "Notes: OFF";
   document.getElementById("notesBtn").style.display = useNotes ? "flex" : "none";
   if (!useNotes) document.getElementById("notesPanel").style.display = "none";
-  // Save notes content too
   localStorage.setItem("calcNotes", document.getElementById("notesTextarea").value);
   saveSettings();
 }
