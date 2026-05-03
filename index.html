@@ -558,6 +558,51 @@ flex-shrink: 0;
   margin: 0;
 }
 
+.notes-button {
+  position: absolute;
+  top: 10px;
+  left: 58px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 11;
+}
+
+#notesPanel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 380px;
+  height: 70%;
+  max-height: 500px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  z-index: 20;
+  padding: 16px;
+  border-radius: 16px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+#notesTextarea {
+  flex: 1;
+  min-height: 0;
+}
+
   </style>
 </head>
 <body>
@@ -566,6 +611,22 @@ flex-shrink: 0;
 <div class="display-wrapper">
   <input id="display" type="text" value="0" dir="ltr"/>
   <div id="wordForm"></div>
+</div>
+
+<button class="notes-button" id="notesBtn" onclick="toggleNotesPanel()" style="display:none;">✎</button>
+
+<div id="notesPanel" style="display:none;">
+
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+
+    <span style="font-weight:700; font-size:18px;">Notes</span>
+
+    <button onclick="toggleNotesPanel()" style="background:none;border:none;font-size:22px;cursor:pointer;">✕</button>
+
+  </div>
+
+  <textarea id="notesTextarea" placeholder="Write your notes here..." style="flex:1; resize:none; border:1.5px solid #ddd; border-radius:12px; padding:12px; font-family:inherit; font-size:15px; outline:none; background:rgba(255,255,255,0.8);"></textarea>
+
 </div>
 
 <section class="calc-buttons">
@@ -700,6 +761,11 @@ The Settings tab in this calculator provides a wide range of customization optio
 <button id="autoCloseParenToggle" class="fraction-toggle-btn on" onclick="toggleAutoCloseParen()">
   <span class="dot"></span>
   <span id="autoCloseParenToggleText">Auto-Close Parentheses: ON</span>
+</button>
+
+<button id="notesToggle" class="fraction-toggle-btn" onclick="toggleNotes()">
+  <span class="dot"></span>
+  <span id="notesToggleText">Notes: OFF</span>
 </button>
 
 <div class="settings-input-btn">
@@ -863,6 +929,7 @@ let lastResult = null;
 let usePemdas = true;
 let decimalPrecision = 15;
 let autoCloseParen = true;
+let useNotes = false;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -1791,6 +1858,7 @@ function saveSettings() {
     sciThreshold,
     decimalPrecision,
     autoCloseParen,
+    useNotes,
     colorBg1: document.getElementById("colorBg1").value,
     colorBg2: document.getElementById("colorBg2").value,
     colorBg3: document.getElementById("colorBg3").value,
@@ -1883,6 +1951,11 @@ if (saved.colorConfirmYes) document.getElementById("colorConfirmYes").value = sa
 if (saved.colorConfirmNo) document.getElementById("colorConfirmNo").value = saved.colorConfirmNo;
 applyConfirmColors();
 
+useNotes = saved.useNotes ?? false;
+document.getElementById("notesToggle").classList.toggle("on", useNotes);
+document.getElementById("notesToggleText").textContent = useNotes ? "Notes: ON" : "Notes: OFF";
+document.getElementById("notesBtn").style.display = useNotes ? "flex" : "none";
+
 }
 
 loadSettings();
@@ -1897,6 +1970,12 @@ function updateDecimalPrecision(val) {
 loadSettings();
 
 }
+
+// Load saved notes
+document.getElementById("notesTextarea").value = localStorage.getItem("calcNotes") || "";
+document.getElementById("notesTextarea").addEventListener("input", () => {
+  localStorage.setItem("calcNotes", document.getElementById("notesTextarea").value);
+});
 
 function toggleAutoCloseParen() {
   autoCloseParen = !autoCloseParen;
@@ -2121,7 +2200,30 @@ function resetAllSettings() {
   document.getElementById("decimalPrecisionInput").value = DEFAULT_SETTINGS.decimalPrecision;
   document.getElementById("sciThresholdInput").value = 11;
 
+useNotes = false;
+document.getElementById("notesToggle").classList.remove("on");
+document.getElementById("notesToggleText").textContent = "Notes: OFF";
+document.getElementById("notesBtn").style.display = "none";
+document.getElementById("notesPanel").style.display = "none";
+
   resetColorSettings();
+  saveSettings();
+}
+
+function toggleNotesPanel() {
+  const panel = document.getElementById("notesPanel");
+  const isOpen = panel.style.display === "flex";
+  panel.style.display = isOpen ? "none" : "flex";
+}
+
+function toggleNotes() {
+  useNotes = !useNotes;
+  document.getElementById("notesToggle").classList.toggle("on", useNotes);
+  document.getElementById("notesToggleText").textContent = useNotes ? "Notes: ON" : "Notes: OFF";
+  document.getElementById("notesBtn").style.display = useNotes ? "flex" : "none";
+  if (!useNotes) document.getElementById("notesPanel").style.display = "none";
+  // Save notes content too
+  localStorage.setItem("calcNotes", document.getElementById("notesTextarea").value);
   saveSettings();
 }
 
