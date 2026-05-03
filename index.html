@@ -28,6 +28,14 @@
   --confirm-yes: #D91414;
   --confirm-no: #0E77E8;
   --confirm-text: #232323;
+
+--notes-bg: #ffffff;
+--notes-title: #232323;
+--notes-close: #232323;
+--notes-outline: #dddddd;
+--notes-placeholder: #aaaaaa;
+--notes-input-bg: rgba(255,255,255,0.8);
+--notes-text: #232323;
 }
 
     html, body {
@@ -583,11 +591,9 @@ flex-shrink: 0;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 380px;
-  height: 70%;
-  max-height: 500px;
-  background: rgba(255,255,255,0.95);
+  width: min(90vw, 380px);
+  height: min(70vh, 500px);
+  background: var(--notes-bg);
   backdrop-filter: blur(10px);
   z-index: 20;
   padding: 16px;
@@ -598,9 +604,43 @@ flex-shrink: 0;
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#notesTitle {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--notes-title);
+}
+
+#notesCloseBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--notes-close);
+}
+
 #notesTextarea {
   flex: 1;
   min-height: 0;
+  resize: none;
+  border: 1.5px solid var(--notes-outline);
+  border-radius: 12px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  background: var(--notes-input-bg);
+  color: var(--notes-text);
+  caret-color: var(--notes-text);
+}
+
+#notesTextarea::placeholder {
+  color: var(--notes-placeholder);
 }
 
   </style>
@@ -616,17 +656,12 @@ flex-shrink: 0;
 <button class="notes-button" id="notesBtn" onclick="toggleNotesPanel()" style="display:none;">✎</button>
 
 <div id="notesPanel" style="display:none;">
-
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-
-    <span style="font-weight:700; font-size:18px;">Notes</span>
-
-    <button onclick="toggleNotesPanel()" style="background:none;border:none;font-size:22px;cursor:pointer;">✕</button>
-
+  <div class="notes-header">
+    <span id="notesTitle">Notes</span>
+    <button id="notesCloseBtn" onclick="toggleNotesPanel()">✕</button>
   </div>
 
-  <textarea id="notesTextarea" placeholder="Write your notes here..." style="flex:1; resize:none; border:1.5px solid #ddd; border-radius:12px; padding:12px; font-family:inherit; font-size:15px; outline:none; background:rgba(255,255,255,0.8);"></textarea>
-
+  <textarea id="notesTextarea" placeholder="Write your notes here..."></textarea>
 </div>
 
 <section class="calc-buttons">
@@ -887,6 +922,43 @@ The Settings tab in this calculator provides a wide range of customization optio
 <div class="settings-color-btn">
   <span>Menu Background</span>
   <input type="color" id="colorHistoryBg" value="#ffffff" oninput="applyModalColors()">
+</div>
+
+<p class="settings-section-label">Notes Colors</p>
+
+<div class="settings-color-btn">
+  <span>Notes Menu Background</span>
+  <input type="color" id="colorNotesBg" value="#ffffff" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Notes Title Color</span>
+  <input type="color" id="colorNotesTitle" value="#232323" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Notes X Button Color</span>
+  <input type="color" id="colorNotesClose" value="#232323" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Input Outline Color</span>
+  <input type="color" id="colorNotesOutline" value="#dddddd" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Placeholder Color</span>
+  <input type="color" id="colorNotesPlaceholder" value="#aaaaaa" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Input Inside Color</span>
+  <input type="color" id="colorNotesInputBg" value="#ffffff" oninput="applyNotesColors()">
+</div>
+
+<div class="settings-color-btn">
+  <span>Notes Text Color</span>
+  <input type="color" id="colorNotesText" value="#232323" oninput="applyNotesColors()">
 </div>
 
 <button class="settings-reset-btn" onclick="resetColorSettings()">Reset Color Settings</button>
@@ -1881,6 +1953,14 @@ function saveSettings() {
     colorConfirmText: document.getElementById("colorConfirmText").value,
     colorConfirmYes: document.getElementById("colorConfirmYes").value,
     colorConfirmNo: document.getElementById("colorConfirmNo").value,
+
+    colorNotesBg: document.getElementById("colorNotesBg").value,
+    colorNotesTitle: document.getElementById("colorNotesTitle").value,
+    colorNotesClose: document.getElementById("colorNotesClose").value,
+    colorNotesOutline: document.getElementById("colorNotesOutline").value,
+    colorNotesPlaceholder: document.getElementById("colorNotesPlaceholder").value,
+    colorNotesInputBg: document.getElementById("colorNotesInputBg").value,
+    colorNotesText: document.getElementById("colorNotesText").value,
   }));
 }
 
@@ -1955,6 +2035,16 @@ useNotes = saved.useNotes ?? false;
 document.getElementById("notesToggle").classList.toggle("on", useNotes);
 document.getElementById("notesToggleText").textContent = useNotes ? "Notes: ON" : "Notes: OFF";
 document.getElementById("notesBtn").style.display = useNotes ? "flex" : "none";
+
+if (saved.colorNotesBg) document.getElementById("colorNotesBg").value = saved.colorNotesBg;
+if (saved.colorNotesTitle) document.getElementById("colorNotesTitle").value = saved.colorNotesTitle;
+if (saved.colorNotesClose) document.getElementById("colorNotesClose").value = saved.colorNotesClose;
+if (saved.colorNotesOutline) document.getElementById("colorNotesOutline").value = saved.colorNotesOutline;
+if (saved.colorNotesPlaceholder) document.getElementById("colorNotesPlaceholder").value = saved.colorNotesPlaceholder;
+if (saved.colorNotesInputBg) document.getElementById("colorNotesInputBg").value = saved.colorNotesInputBg;
+if (saved.colorNotesText) document.getElementById("colorNotesText").value = saved.colorNotesText;
+
+applyNotesColors();
 
 }
 
@@ -2123,6 +2213,13 @@ const DEFAULT_SETTINGS = {
   colorConfirmText: "#232323",
   colorConfirmYes: "#D91414",
   colorConfirmNo: "#0E77E8",
+  colorNotesBg: "#ffffff",
+  colorNotesTitle: "#232323",
+  colorNotesClose: "#232323",
+  colorNotesOutline: "#dddddd",
+  colorNotesPlaceholder: "#aaaaaa",
+  colorNotesInputBg: "#ffffff",
+  colorNotesText: "#232323",
 };
 
 function resetColorSettings() {
@@ -2152,7 +2249,16 @@ function resetColorSettings() {
   document.getElementById("colorConfirmYes").value = DEFAULT_SETTINGS.colorConfirmYes;
   document.getElementById("colorConfirmNo").value = DEFAULT_SETTINGS.colorConfirmNo;
 
+  document.getElementById("colorNotesBg").value = "#ffffff";
+  document.getElementById("colorNotesTitle").value = "#232323";
+  document.getElementById("colorNotesClose").value = "#232323";
+  document.getElementById("colorNotesOutline").value = "#dddddd";
+  document.getElementById("colorNotesPlaceholder").value = "#aaaaaa";
+  document.getElementById("colorNotesInputBg").value = "#ffffff";
+  document.getElementById("colorNotesText").value = "#232323";
+
   applyColors();
+  applyNotesColors();
   applyModalColors();
   applyToggleColors();
   applyConfirmColors();
@@ -2224,6 +2330,26 @@ function toggleNotes() {
   if (!useNotes) document.getElementById("notesPanel").style.display = "none";
   // Save notes content too
   localStorage.setItem("calcNotes", document.getElementById("notesTextarea").value);
+  saveSettings();
+}
+
+function applyNotesColors() {
+  const bg = document.getElementById("colorNotesBg").value;
+  const title = document.getElementById("colorNotesTitle").value;
+  const close = document.getElementById("colorNotesClose").value;
+  const outline = document.getElementById("colorNotesOutline").value;
+  const placeholder = document.getElementById("colorNotesPlaceholder").value;
+  const inputBg = document.getElementById("colorNotesInputBg").value;
+  const text = document.getElementById("colorNotesText").value;
+
+  document.documentElement.style.setProperty('--notes-bg', bg);
+  document.documentElement.style.setProperty('--notes-title', title);
+  document.documentElement.style.setProperty('--notes-close', close);
+  document.documentElement.style.setProperty('--notes-outline', outline);
+  document.documentElement.style.setProperty('--notes-placeholder', placeholder);
+  document.documentElement.style.setProperty('--notes-input-bg', inputBg);
+  document.documentElement.style.setProperty('--notes-text', text);
+
   saveSettings();
 }
 
