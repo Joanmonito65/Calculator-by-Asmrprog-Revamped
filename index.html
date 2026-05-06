@@ -808,6 +808,11 @@ The Settings tab in this calculator provides a wide range of customization optio
   <span id="factorialToggleText">Iterated Factorials: OFF</span>
 </button>
 
+<button id="zerosToggle" class="fraction-toggle-btn on" onclick="toggleZerosBeforeDecimals()">
+  <span class="dot"></span>
+  <span id="zerosToggleText">Zeros Before Decimals: ON</span>
+</button>
+
 <div class="settings-input-btn">
   <span>Decimal Precision</span>
   <input type="number" id="decimalPrecisionInput" value="15" min="0" max="15"
@@ -1013,6 +1018,7 @@ let decimalPrecision = 15;
 let autoCloseParen = true;
 let useNotes = false;
 let useIteratedFactorial = false;
+let useZerosBeforeDecimals = true;
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -1022,7 +1028,7 @@ function getFormattedDate() {
 function addCommasToNumbers(expr) {
   if (!useCommas) return expr;
   const locale = useEuropeanSeparator ? "de-DE" : "en-US";
-  return expr.replace(/\d+(\.\d+)?/g, (match) => {
+return expr.replace(/(?<!\.)(\d+)(\.\d+)?/g, (match) => {
     if (match.includes(".")) {
       const parts = match.split(".");
       const intPart = parts[0];
@@ -1096,7 +1102,13 @@ if (Math.abs(num) >= sciThreshold || (Math.abs(num) > 0 && Math.abs(num) < 1 / s
     return simplifyExponential(num.toExponential());
   }
 let str = num.toFixed(decimalPrecision).replace(/\.?0+$/, "");
+
+if (!useZerosBeforeDecimals) {
+  if (str.startsWith('0.')) str = str.slice(1);
+  else if (str.startsWith('-0.')) str = '-' + str.slice(2);
+}
 return str;
+
 }
 
 function buttonClick(value) {
@@ -1961,6 +1973,7 @@ function saveSettings() {
     autoCloseParen,
     useNotes,
     useIteratedFactorial,
+    useZerosBeforeDecimals,
     colorBg1: document.getElementById("colorBg1").value,
     colorBg2: document.getElementById("colorBg2").value,
     colorBg3: document.getElementById("colorBg3").value,
@@ -2085,6 +2098,10 @@ document.getElementById("factorialToggleText").textContent = useIteratedFactoria
 
 if (saved.colorWordForm) document.getElementById("colorWordForm").value = saved.colorWordForm;
 applyWordFormColor();
+
+useZerosBeforeDecimals = saved.useZerosBeforeDecimals ?? true;
+document.getElementById("zerosToggle").classList.toggle("on", useZerosBeforeDecimals);
+document.getElementById("zerosToggleText").textContent = useZerosBeforeDecimals ? "Zeros Before Decimals: ON" : "Zeros Before Decimals: OFF";
 
 }
 
@@ -2230,6 +2247,7 @@ const DEFAULT_SETTINGS = {
   sciThreshold: 1e11,
   decimalPrecision: 15,
   autoCloseParen: true,
+  useZerosBeforeDecimals: true,
   colorBg1: "#eb92be",
   colorBg2: "#ffef78",
   colorBg3: "#63c9b4",
@@ -2358,6 +2376,10 @@ useIteratedFactorial = false;
 document.getElementById("factorialToggle").classList.remove("on");
 document.getElementById("factorialToggleText").textContent = "Iterated Factorials: OFF";
 
+useZerosBeforeDecimals = true;
+document.getElementById("zerosToggle").classList.add("on");
+document.getElementById("zerosToggleText").textContent = "Zeros Before Decimals: ON";
+
   resetColorSettings();
   saveSettings();
 }
@@ -2415,6 +2437,13 @@ function factorial(n) {
 function applyWordFormColor() {
   const color = document.getElementById("colorWordForm").value;
   document.documentElement.style.setProperty('--word-form-color', color);
+  saveSettings();
+}
+
+function toggleZerosBeforeDecimals() {
+  useZerosBeforeDecimals = !useZerosBeforeDecimals;
+  document.getElementById("zerosToggle").classList.toggle("on", useZerosBeforeDecimals);
+  document.getElementById("zerosToggleText").textContent = useZerosBeforeDecimals ? "Zeros Before Decimals: ON" : "Zeros Before Decimals: OFF";
   saveSettings();
 }
 
