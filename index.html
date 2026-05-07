@@ -6,7 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculator</title>
 <link rel="icon" href="favicon.png" type="image/png">
+
 <link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&family=Comfortaa:wght@400;700&family=DM+Sans:wght@400;700&family=Dosis:wght@400;700&family=Exo+2:wght@400;700&family=Inter:wght@400;700&family=Josefin+Sans:wght@400;700&family=Lato:wght@400;700&family=Lexend:wght@400;700&family=Montserrat:wght@400;700&family=Nunito:wght@400;700&family=Outfit:wght@400;700&family=Poppins:wght@400;700&family=Quicksand:wght@400;700&family=Raleway:wght@400;700&family=Roboto:wght@400;700&family=Ubuntu:wght@400;700&family=Varela+Round&display=swap" rel="stylesheet">
   <style>
 
 :root {
@@ -43,7 +48,7 @@
       box-sizing: border-box;
       height: 100%;
       margin: 0;
-      font-family: 'Dosis', sans-serif;
+      font-family: sans-serif;
     }
     *, *::before, *::after { box-sizing: inherit; }
     body {
@@ -500,7 +505,7 @@ flex-shrink: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   z-index: 2;
-  font-family: 'Dosis', sans-serif;
+  font-family: sans-serif;
   letter-spacing: 0.02em;
 }
 
@@ -641,6 +646,18 @@ flex-shrink: 0;
 
 #notesTextarea::placeholder {
   color: var(--notes-placeholder);
+}
+
+.settings-input-btn select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: white;
+  cursor: pointer;
+  max-width: 140px;
 }
 
   </style>
@@ -823,6 +840,35 @@ The Settings tab in this calculator provides a wide range of customization optio
   <span>Scientific Min</span>
   <input type="number" id="sciThresholdInput" value="11" min="1" max="20"
  onchange="updateSciThreshold(this.value)" />
+
+</div>
+
+<p class="settings-section-label">Typography</p>
+<div class="settings-input-btn">
+  <span>Font</span>
+
+<select id="fontSelect" onchange="applyFont()">
+
+  <option value="">System Default</option>
+  <option value="Dosis">Dosis</option>
+  <option value="Poppins">Poppins</option>
+  <option value="Nunito">Nunito</option>
+  <option value="Roboto">Roboto</option>
+  <option value="Lato">Lato</option>
+  <option value="Montserrat">Montserrat</option>
+  <option value="Quicksand">Quicksand</option>
+  <option value="Comfortaa">Comfortaa</option>
+  <option value="Inter">Inter</option>
+  <option value="Raleway">Raleway</option>
+  <option value="Ubuntu">Ubuntu</option>
+  <option value="Josefin Sans">Josefin Sans</option>
+  <option value="Exo 2">Exo 2</option>
+  <option value="Cabin">Cabin</option>
+  <option value="Varela Round">Varela Round</option>
+  <option value="DM Sans">DM Sans</option>
+  <option value="Lexend">Lexend</option>
+  <option value="Outfit">Outfit</option>
+</select>
 
 </div>
 
@@ -1019,6 +1065,7 @@ let autoCloseParen = true;
 let useNotes = false;
 let useIteratedFactorial = false;
 let useZerosBeforeDecimals = true;
+let currentFont = "";
 function getFormattedDate() {
   return new Date().toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -1974,6 +2021,7 @@ function saveSettings() {
     useNotes,
     useIteratedFactorial,
     useZerosBeforeDecimals,
+    currentFont: currentFont,
     colorBg1: document.getElementById("colorBg1").value,
     colorBg2: document.getElementById("colorBg2").value,
     colorBg3: document.getElementById("colorBg3").value,
@@ -2102,6 +2150,11 @@ applyWordFormColor();
 useZerosBeforeDecimals = saved.useZerosBeforeDecimals ?? true;
 document.getElementById("zerosToggle").classList.toggle("on", useZerosBeforeDecimals);
 document.getElementById("zerosToggleText").textContent = useZerosBeforeDecimals ? "Zeros Before Decimals: ON" : "Zeros Before Decimals: OFF";
+
+currentFont = saved.currentFont ?? "";
+const fontSelectEl = document.getElementById("fontSelect");
+if (fontSelectEl) fontSelectEl.value = currentFont;
+document.body.style.fontFamily = currentFont ? `'${currentFont}', sans-serif` : "sans-serif";
 
 }
 
@@ -2278,6 +2331,7 @@ const DEFAULT_SETTINGS = {
   colorNotesInputBg: "#ffffff",
   colorNotesText: "#232323",
   colorWordForm: "#aaaaaa",
+  currentFont: "",
 };
 
 function resetColorSettings() {
@@ -2380,6 +2434,10 @@ useZerosBeforeDecimals = true;
 document.getElementById("zerosToggle").classList.add("on");
 document.getElementById("zerosToggleText").textContent = "Zeros Before Decimals: ON";
 
+currentFont = "";
+document.getElementById("fontSelect").value = "";
+document.body.style.fontFamily = "sans-serif";
+
   resetColorSettings();
   saveSettings();
 }
@@ -2444,6 +2502,13 @@ function toggleZerosBeforeDecimals() {
   useZerosBeforeDecimals = !useZerosBeforeDecimals;
   document.getElementById("zerosToggle").classList.toggle("on", useZerosBeforeDecimals);
   document.getElementById("zerosToggleText").textContent = useZerosBeforeDecimals ? "Zeros Before Decimals: ON" : "Zeros Before Decimals: OFF";
+  saveSettings();
+}
+
+function applyFont() {
+  const font = document.getElementById("fontSelect").value;
+  currentFont = font;
+  document.body.style.fontFamily = font ? `'${font}', sans-serif` : "sans-serif";
   saveSettings();
 }
 
